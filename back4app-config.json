@@ -1,0 +1,12 @@
+{
+  "appName": "pdf-extractor-api",
+  "applicationId": "mK60GEj1uzfoICD3dFxW75KZ5K77bbBoaWeeENeK",
+  "masterKey": "ZDYmU9PLUhJRhTscXJGBFlU8wThrKY6Q0alTtZu2",
+  "javascriptKey": "gOSZEC3DvriLcA6lUoPWULQEjTz04teaNt3yieOX",
+  "restKey": "T6yOY12KmtVG1KyvPgd8TaFf7fp41g1Ch9AKhsYy",
+  "webhookKey": "q5ZpNCSYuHuSwdKtXmKSEOupxx0sOsblPMHBAZPH",
+  "subdomain": "wquespdf-extractor-api.b4a.app",
+  "url": "https://wquespdf-extractor-api.b4a.app",
+  "serverUrl": "https://parseapi.back4app.com",
+  "liveQueryUrl": "wss://wquespdf-extractor-api.b4a.app"
+}

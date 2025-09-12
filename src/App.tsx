@@ -23,7 +23,7 @@ export default function App() {
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="max-w-4xl mx-auto">
         <Tabs defaultValue="upload" className="w-full">
-          <TabsList className="mb-8">
+          <TabsList className="mb-8 flex justify-center">
             <TabsTrigger 
               value="upload" 
               className="px-8 py-3 bg-blue-500 text-white data-[state=active]:bg-blue-600"
@@ -51,8 +51,8 @@ export default function App() {
               </CardHeader>
               
               <CardContent className="space-y-6">
-                <div className="flex justify-center">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl w-full">
+                <div className="w-full">
+                  <div className="grid grid-cols-2 gap-4 w-full">
                     <Select onValueChange={setSelectedCompany}>
                       <SelectTrigger className="h-12">
                         <SelectValue placeholder="Select a company" />

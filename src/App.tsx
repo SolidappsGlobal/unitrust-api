@@ -21,31 +21,38 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
-      <div className="max-w-4xl mx-auto">
+      <div className="w-full">
         <Tabs defaultValue="upload" className="w-full">
-          <TabsList className="mb-8 flex justify-center">
-            <TabsTrigger 
-              value="upload" 
-              className="px-8 py-3 bg-blue-500 text-white data-[state=active]:bg-blue-600"
-            >
-              Upload (CSV)
-            </TabsTrigger>
-            <TabsTrigger 
-              value="list" 
-              className="px-8 py-3 bg-blue-300 text-white data-[state=active]:bg-blue-400"
-            >
-              List
-            </TabsTrigger>
-          </TabsList>
+          <div className="w-full flex justify-center mb-4">
+            <div className="bg-white shadow-sm rounded-full p-4">
+              <TabsList className="flex gap-4">
+                <TabsTrigger 
+                  value="upload" 
+                  className="px-8 py-3 bg-blue-500 text-white data-[state=active]:bg-blue-600"
+                >
+                  Upload (CSV)
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="list" 
+                  className="px-8 py-3 bg-blue-300 text-white data-[state=active]:bg-blue-400"
+                >
+                  List
+                </TabsTrigger>
+              </TabsList>
+            </div>
+          </div>
 
           <TabsContent value="upload">
-            <Card className="bg-white shadow-sm">
+            <Card className="bg-white shadow-sm p-6">
               <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle className="flex items-center gap-2 text-blue-700 text-2xl font-bold">
-                  Carrier Data Extractor
-                </CardTitle>
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center p-3">
-                  <FileSpreadsheet className="w-8 h-8 text-blue-600" />
+                <div className="flex flex-col">
+                  <CardTitle className="flex items-center gap-2 text-blue-700 text-2xl font-bold">
+                    Carrier Data Extractor
+                  </CardTitle>
+                  <p className="text-gray-600 text-sm mt-1">Extract and process carrier data from CSV files</p>
+                </div>
+                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center p-2">
+                  <FileSpreadsheet className="w-6 h-6 text-blue-600" />
                 </div>
               </CardHeader>
               
@@ -54,7 +61,7 @@ export default function App() {
                   <div className="flex gap-4 w-full">
                     <div className="flex-1">
                       <Select onValueChange={setSelectedCompany}>
-                        <SelectTrigger className="h-12 w-full">
+                        <SelectTrigger className="h-12 w-full bg-gray-100">
                           <SelectValue placeholder="Select a company" />
                         </SelectTrigger>
                         <SelectContent>
@@ -67,7 +74,7 @@ export default function App() {
 
                     <div className="flex-1">
                       <Select onValueChange={setSelectedDocumentType}>
-                        <SelectTrigger className="h-12 w-full">
+                        <SelectTrigger className="h-12 w-full bg-gray-100">
                           <SelectValue placeholder="Choose document type" />
                         </SelectTrigger>
                         <SelectContent>

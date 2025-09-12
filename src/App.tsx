@@ -41,39 +41,42 @@ export default function App() {
           <TabsContent value="upload">
             <Card className="bg-white shadow-sm">
               <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle className="flex items-center gap-2 text-blue-700">
+                <CardTitle className="flex items-center gap-2 text-blue-700 text-2xl font-bold">
                   Carrier Data Extractor
                 </CardTitle>
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <FileSpreadsheet className="w-6 h-6 text-blue-600" />
-                  <span className="text-xs font-medium text-blue-600 ml-1">CSV</span>
+                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center p-3">
+                  <FileSpreadsheet className="w-8 h-8 text-blue-600" />
                 </div>
               </CardHeader>
               
               <CardContent className="space-y-6">
                 <div className="w-full">
-                  <div className="grid grid-cols-2 gap-4 w-full">
-                    <Select onValueChange={setSelectedCompany}>
-                      <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select a company" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="company1">Company A</SelectItem>
-                        <SelectItem value="company2">Company B</SelectItem>
-                        <SelectItem value="company3">Company C</SelectItem>
-                      </SelectContent>
-                    </Select>
+                  <div className="flex gap-4 w-full">
+                    <div className="flex-1">
+                      <Select onValueChange={setSelectedCompany}>
+                        <SelectTrigger className="h-12 w-full">
+                          <SelectValue placeholder="Select a company" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="company1">Company A</SelectItem>
+                          <SelectItem value="company2">Company B</SelectItem>
+                          <SelectItem value="company3">Company C</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
 
-                    <Select onValueChange={setSelectedDocumentType}>
-                      <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Choose document type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="invoice">Invoice</SelectItem>
-                        <SelectItem value="receipt">Receipt</SelectItem>
-                        <SelectItem value="contract">Contract</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <div className="flex-1">
+                      <Select onValueChange={setSelectedDocumentType}>
+                        <SelectTrigger className="h-12 w-full">
+                          <SelectValue placeholder="Choose document type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="invoice">Invoice</SelectItem>
+                          <SelectItem value="receipt">Receipt</SelectItem>
+                          <SelectItem value="contract">Contract</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
                 </div>
 

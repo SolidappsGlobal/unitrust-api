@@ -1,0 +1,2 @@
+text-2xl text-xl text-lg text-base text-sm text-xs
+font-bold font-semibold font-medium font-normal

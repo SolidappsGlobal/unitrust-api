@@ -1,0 +1,57 @@
+{
+  "className": "APPStatus",
+  "fields": {
+    "objectId": {
+      "type": "String"
+    },
+    "createdAt": {
+      "type": "Date"
+    },
+    "updatedAt": {
+      "type": "Date"
+    },
+    "ACL": {
+      "type": "ACL"
+    },
+    "name": {
+      "type": "String"
+    },
+    "display": {
+      "type": "String"
+    },
+    "statusGroup": {
+      "type": "String"
+    }
+  },
+  "classLevelPermissions": {
+    "find": {
+      "*": true
+    },
+    "count": {
+      "*": true
+    },
+    "get": {
+      "*": true
+    },
+    "create": {
+      "requiresAuthentication": true
+    },
+    "update": {
+      "requiresAuthentication": true
+    },
+    "delete": {
+      "requiresAuthentication": true
+    },
+    "addField": {
+      "requiresAuthentication": true
+    },
+    "protectedFields": {
+      "*": []
+    }
+  },
+  "indexes": {
+    "_id_": {
+      "_id": 1
+    }
+  }
+}

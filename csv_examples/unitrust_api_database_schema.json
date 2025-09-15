@@ -1,0 +1,810 @@
+{
+  "exportInfo": {
+    "exportDate": "2025-09-12T18:21:00.000Z",
+    "sourceApp": "Unitrust API",
+    "applicationId": "2OD7YGNRp0KJDN6q6o9X7dG12NfLL1YYgfUUkw17",
+    "exportType": "Schema + Data (Excluding _User and _Role)",
+    "version": "2.0"
+  },
+  "schemas": [
+    {
+      "className": "AppStatusMatching",
+      "fields": {
+        "objectId": {
+          "type": "String"
+        },
+        "createdAt": {
+          "type": "Date"
+        },
+        "updatedAt": {
+          "type": "Date"
+        },
+        "ACL": {
+          "type": "ACL"
+        },
+        "carrier": {
+          "type": "String"
+        },
+        "carrier_status_raw": {
+          "type": "String"
+        },
+        "carrier_status_matching": {
+          "type": "Pointer",
+          "targetClass": "APPStatus",
+          "required": true
+        },
+        "carrier_status_match": {
+          "type": "String"
+        }
+      },
+      "classLevelPermissions": {
+        "find": {
+          "*": true
+        },
+        "count": {
+          "*": true
+        },
+        "get": {
+          "*": true
+        },
+        "create": {
+          "*": true
+        },
+        "update": {
+          "*": true
+        },
+        "delete": {
+          "*": true
+        },
+        "addField": {
+          "*": true
+        },
+        "protectedFields": {
+          "*": []
+        }
+      },
+      "indexes": {
+        "_id_": {
+          "_id": 1
+        }
+      }
+    },
+    {
+      "className": "AppStatusUpdate",
+      "fields": {
+        "objectId": {
+          "type": "String"
+        },
+        "createdAt": {
+          "type": "Date"
+        },
+        "updatedAt": {
+          "type": "Date"
+        },
+        "ACL": {
+          "type": "ACL"
+        },
+        "APP": {
+          "type": "String"
+        },
+        "carrier_status_raw": {
+          "type": "String"
+        },
+        "confirmed": {
+          "type": "Boolean"
+        },
+        "date_confirmed": {
+          "type": "Date"
+        },
+        "full_data": {
+          "type": "String"
+        },
+        "ranked_apps": {
+          "type": "Array"
+        },
+        "received_data": {
+          "type": "String"
+        },
+        "carrier_status_match": {
+          "type": "Pointer",
+          "targetClass": "APPStatus",
+          "required": true
+        }
+      },
+      "classLevelPermissions": {
+        "find": {
+          "*": true
+        },
+        "count": {
+          "*": true
+        },
+        "get": {
+          "*": true
+        },
+        "create": {
+          "*": true
+        },
+        "update": {
+          "*": true
+        },
+        "delete": {
+          "*": true
+        },
+        "addField": {
+          "*": true
+        },
+        "protectedFields": {
+          "*": []
+        }
+      }
+    },
+    {
+      "className": "APPStatus",
+      "fields": {
+        "objectId": {
+          "type": "String"
+        },
+        "createdAt": {
+          "type": "Date"
+        },
+        "updatedAt": {
+          "type": "Date"
+        },
+        "ACL": {
+          "type": "ACL"
+        },
+        "name": {
+          "type": "String"
+        },
+        "display": {
+          "type": "String"
+        },
+        "statusGroup": {
+          "type": "String"
+        }
+      },
+      "classLevelPermissions": {
+        "find": {
+          "*": true
+        },
+        "count": {
+          "*": true
+        },
+        "get": {
+          "*": true
+        },
+        "create": {
+          "requiresAuthentication": true
+        },
+        "update": {
+          "requiresAuthentication": true
+        },
+        "delete": {
+          "requiresAuthentication": true
+        },
+        "addField": {
+          "requiresAuthentication": true
+        },
+        "protectedFields": {
+          "*": []
+        }
+      },
+      "indexes": {
+        "_id_": {
+          "_id": 1
+        }
+      }
+    },
+    {
+      "className": "AppStatusLog",
+      "fields": {
+        "objectId": {
+          "type": "String"
+        },
+        "createdAt": {
+          "type": "Date"
+        },
+        "updatedAt": {
+          "type": "Date"
+        },
+        "ACL": {
+          "type": "ACL"
+        },
+        "APP": {
+          "type": "String"
+        },
+        "status_before": {
+          "type": "String"
+        },
+        "status_change_date": {
+          "type": "Date"
+        },
+        "status_now": {
+          "type": "Pointer",
+          "targetClass": "APPStatus"
+        }
+      },
+      "classLevelPermissions": {
+        "find": {
+          "*": true
+        },
+        "count": {
+          "*": true
+        },
+        "get": {
+          "*": true
+        },
+        "create": {
+          "*": true
+        },
+        "update": {
+          "*": true
+        },
+        "delete": {
+          "*": true
+        },
+        "addField": {
+          "*": true
+        },
+        "protectedFields": {
+          "*": []
+        }
+      }
+    }
+  ],
+  "data": {
+    "APPStatus": [
+      {
+        "objectId": "25SzqiOtDk",
+        "name": "Being Reviewed at UniT",
+        "display": "Being Reviewed at UniT",
+        "statusGroup": "In Progress",
+        "createdAt": "2025-09-12T17:03:07.102Z",
+        "updatedAt": "2025-09-12T18:04:54.326Z",
+        "ACL": {
+          "*": {
+            "read": true
+          }
+        }
+      },
+      {
+        "objectId": "zER6v87xBW",
+        "name": "Pending Requirements",
+        "display": "Pending Requirements",
+        "statusGroup": "Pending",
+        "createdAt": "2025-09-12T17:03:07.100Z",
+        "updatedAt": "2025-09-12T18:04:54.365Z",
+        "ACL": {
+          "*": {
+            "read": true
+          }
+        }
+      },
+      {
+        "objectId": "jgFUNHk1qq",
+        "name": "Issue-Paid",
+        "display": "Issue-Paid",
+        "statusGroup": "Completed",
+        "createdAt": "2025-09-12T17:03:07.105Z",
+        "updatedAt": "2025-09-12T18:04:54.368Z",
+        "ACL": {
+          "*": {
+            "read": true
+          }
+        }
+      },
+      {
+        "objectId": "C1CSv4vukD",
+        "name": "Submitted to Carrier",
+        "display": "Submitted to Carrier",
+        "statusGroup": "Pending",
+        "createdAt": "2025-09-12T17:03:07.106Z",
+        "updatedAt": "2025-09-12T18:04:54.369Z",
+        "ACL": {
+          "*": {
+            "read": true
+          }
+        }
+      },
+      {
+        "objectId": "YUdYxAmsRJ",
+        "name": "Pending No Requirement",
+        "display": "Pending No Requirement",
+        "statusGroup": "Pending",
+        "createdAt": "2025-09-12T17:03:07.138Z",
+        "updatedAt": "2025-09-12T18:04:54.365Z",
+        "ACL": {
+          "*": {
+            "read": true
+          }
+        }
+      },
+      {
+        "objectId": "mWEHTrRSAl",
+        "name": "Declined",
+        "display": "Declined",
+        "statusGroup": "Closed",
+        "createdAt": "2025-09-12T17:03:33.588Z",
+        "updatedAt": "2025-09-12T18:05:11.190Z",
+        "ACL": {
+          "*": {
+            "read": true
+          }
+        }
+      },
+      {
+        "objectId": "TkPVtxiFmh",
+        "name": "Withdrawn",
+        "display": "Withdrawn",
+        "statusGroup": "Closed",
+        "createdAt": "2025-09-12T17:03:33.586Z",
+        "updatedAt": "2025-09-12T18:05:11.180Z",
+        "ACL": {
+          "*": {
+            "read": true
+          }
+        }
+      },
+      {
+        "objectId": "zwkbeanRX9",
+        "name": "Future Effective Date",
+        "display": "Future Effective Date",
+        "statusGroup": "Pending",
+        "createdAt": "2025-09-12T17:03:33.591Z",
+        "updatedAt": "2025-09-12T18:05:11.209Z",
+        "ACL": {
+          "*": {
+            "read": true
+          }
+        }
+      },
+      {
+        "objectId": "jptCRH5iOR",
+        "name": "Missing Requirements",
+        "display": "Missing Requirements",
+        "statusGroup": "Pending",
+        "createdAt": "2025-09-12T17:03:33.597Z",
+        "updatedAt": "2025-09-12T18:05:11.184Z",
+        "ACL": {
+          "*": {
+            "read": true
+          }
+        }
+      },
+      {
+        "objectId": "hXnHAMdcCH",
+        "name": "Closed",
+        "display": "Closed",
+        "statusGroup": "Closed",
+        "createdAt": "2025-09-12T17:03:33.596Z",
+        "updatedAt": "2025-09-12T18:05:11.205Z",
+        "ACL": {
+          "*": {
+            "read": true
+          }
+        }
+      },
+      {
+        "objectId": "et6sHyPp9s",
+        "name": "Pending Contracting",
+        "display": "Pending Contracting",
+        "statusGroup": "Pending",
+        "createdAt": "2025-09-12T17:03:43.390Z",
+        "updatedAt": "2025-09-12T18:05:25.087Z",
+        "ACL": {
+          "*": {
+            "read": true
+          }
+        }
+      },
+      {
+        "objectId": "0RbSxm2Uri",
+        "name": "Lapsed",
+        "display": "Lapsed",
+        "statusGroup": "Closed",
+        "createdAt": "2025-09-12T17:03:43.391Z",
+        "updatedAt": "2025-09-12T18:05:25.139Z",
+        "ACL": {
+          "*": {
+            "read": true
+          }
+        }
+      },
+      {
+        "objectId": "WdArrGsL41",
+        "name": "Not Taken",
+        "display": "Not Taken",
+        "statusGroup": "Closed",
+        "createdAt": "2025-09-12T17:03:43.400Z",
+        "updatedAt": "2025-09-12T18:05:25.139Z",
+        "ACL": {
+          "*": {
+            "read": true
+          }
+        }
+      },
+      {
+        "objectId": "zzP4riEYgS",
+        "name": "Lapse Pending",
+        "display": "Lapse Pending",
+        "statusGroup": "Pending",
+        "createdAt": "2025-09-12T17:03:43.401Z",
+        "updatedAt": "2025-09-12T18:05:25.087Z",
+        "ACL": {
+          "*": {
+            "read": true
+          }
+        }
+      },
+      {
+        "objectId": "eaUE08sBVC",
+        "name": "Approved",
+        "display": "Approved",
+        "statusGroup": "Completed",
+        "createdAt": "2025-09-12T17:03:43.411Z",
+        "updatedAt": "2025-09-12T18:05:25.090Z",
+        "ACL": {
+          "*": {
+            "read": true
+          }
+        }
+      },
+      {
+        "objectId": "mrEgC2mecE",
+        "name": "Active",
+        "display": "Active",
+        "statusGroup": "Active",
+        "createdAt": "2025-09-12T17:03:50.445Z",
+        "updatedAt": "2025-09-12T18:05:35.721Z",
+        "ACL": {
+          "*": {
+            "read": true
+          }
+        }
+      },
+      {
+        "objectId": "bZ5HXRwLeY",
+        "name": "Delivered",
+        "display": "Delivered",
+        "statusGroup": "Completed",
+        "createdAt": "2025-09-12T17:03:50.464Z",
+        "updatedAt": "2025-09-12T18:05:35.720Z",
+        "ACL": {
+          "*": {
+            "read": true
+          }
+        }
+      },
+      {
+        "objectId": "oEIFVqgJtL",
+        "name": "Direct Bill",
+        "display": "Direct Bill",
+        "statusGroup": "Completed",
+        "createdAt": "2025-09-12T17:03:50.464Z",
+        "updatedAt": "2025-09-12T18:05:35.709Z",
+        "ACL": {
+          "*": {
+            "read": true
+          }
+        }
+      }
+    ],
+    "AppStatusLog": [],
+    "AppStatusMatching": [
+      {
+        "objectId": "LmSwaL3rNA",
+        "carrier": "AMERICAN AMICABLE",
+        "carrier_status_matching": {
+          "__type": "Pointer",
+          "className": "APPStatus",
+          "objectId": "TkPVtxiFmh"
+        },
+        "carrier_status_raw": "sold",
+        "createdAt": "2025-09-12T18:19:46.273Z",
+        "updatedAt": "2025-09-12T18:19:46.273Z"
+      },
+      {
+        "objectId": "MABYaljHRz",
+        "carrier": "AMERICAN AMICABLE",
+        "carrier_status_matching": {
+          "__type": "Pointer",
+          "className": "APPStatus",
+          "objectId": "zER6v87xBW"
+        },
+        "carrier_status_raw": "needreqmnt",
+        "createdAt": "2025-09-12T18:19:46.290Z",
+        "updatedAt": "2025-09-12T18:19:46.290Z"
+      },
+      {
+        "objectId": "kBfdFMWnvb",
+        "carrier": "AMERICAN AMICABLE",
+        "carrier_status_matching": {
+          "__type": "Pointer",
+          "className": "APPStatus",
+          "objectId": "hXnHAMdcCH"
+        },
+        "carrier_status_raw": "rpu",
+        "createdAt": "2025-09-12T18:19:46.280Z",
+        "updatedAt": "2025-09-12T18:19:46.280Z"
+      },
+      {
+        "objectId": "9t8JnRUuNs",
+        "carrier": "AMERICAN AMICABLE",
+        "carrier_status_matching": {
+          "__type": "Pointer",
+          "className": "APPStatus",
+          "objectId": "hXnHAMdcCH"
+        },
+        "carrier_status_raw": "postponed",
+        "createdAt": "2025-09-12T18:19:46.275Z",
+        "updatedAt": "2025-09-12T18:19:46.275Z"
+      },
+      {
+        "objectId": "MhDvcq0UV1",
+        "carrier": "AMERICAN AMICABLE",
+        "carrier_status_matching": {
+          "__type": "Pointer",
+          "className": "APPStatus",
+          "objectId": "WdArrGsL41"
+        },
+        "carrier_status_raw": "eti",
+        "createdAt": "2025-09-12T18:19:46.277Z",
+        "updatedAt": "2025-09-12T18:19:46.277Z"
+      },
+      {
+        "objectId": "6SZEcd93AL",
+        "carrier": "AMERICAN AMICABLE",
+        "carrier_status_matching": {
+          "__type": "Pointer",
+          "className": "APPStatus",
+          "objectId": "WdArrGsL41"
+        },
+        "carrier_status_raw": "issnotpaid",
+        "createdAt": "2025-09-12T18:19:59.823Z",
+        "updatedAt": "2025-09-12T18:19:59.823Z"
+      },
+      {
+        "objectId": "oqfijsvq23",
+        "carrier": "AMERICAN AMICABLE",
+        "carrier_status_matching": {
+          "__type": "Pointer",
+          "className": "APPStatus",
+          "objectId": "hXnHAMdcCH"
+        },
+        "carrier_status_raw": "deathclaim",
+        "createdAt": "2025-09-12T18:19:59.828Z",
+        "updatedAt": "2025-09-12T18:19:59.828Z"
+      },
+      {
+        "objectId": "tfCWugS7Hy",
+        "carrier": "AMERICAN AMICABLE",
+        "carrier_status_matching": {
+          "__type": "Pointer",
+          "className": "APPStatus",
+          "objectId": "hXnHAMdcCH"
+        },
+        "carrier_status_raw": "actretitem",
+        "createdAt": "2025-09-12T18:19:59.832Z",
+        "updatedAt": "2025-09-12T18:19:59.832Z"
+      },
+      {
+        "objectId": "35uNHwFVru",
+        "carrier": "AMERICAN AMICABLE",
+        "carrier_status_matching": {
+          "__type": "Pointer",
+          "className": "APPStatus",
+          "objectId": "zER6v87xBW"
+        },
+        "carrier_status_raw": "pending",
+        "createdAt": "2025-09-12T18:19:59.833Z",
+        "updatedAt": "2025-09-12T18:19:59.833Z"
+      },
+      {
+        "objectId": "mPCYoEmwYR",
+        "carrier": "AMERICAN AMICABLE",
+        "carrier_status_matching": {
+          "__type": "Pointer",
+          "className": "APPStatus",
+          "objectId": "hXnHAMdcCH"
+        },
+        "carrier_status_raw": "terminated",
+        "createdAt": "2025-09-12T18:19:59.841Z",
+        "updatedAt": "2025-09-12T18:19:59.841Z"
+      },
+      {
+        "objectId": "HewZrQKRLD",
+        "carrier": "AMERICAN AMICABLE",
+        "carrier_status_matching": {
+          "__type": "Pointer",
+          "className": "APPStatus",
+          "objectId": "mWEHTrRSAl"
+        },
+        "carrier_status_raw": "actpastdue",
+        "createdAt": "2025-09-12T18:20:14.761Z",
+        "updatedAt": "2025-09-12T18:20:14.761Z"
+      },
+      {
+        "objectId": "pSeFZzKGwr",
+        "carrier": "AMERICAN AMICABLE",
+        "carrier_status_matching": {
+          "__type": "Pointer",
+          "className": "APPStatus",
+          "objectId": "WdArrGsL41"
+        },
+        "carrier_status_raw": "nottaken",
+        "createdAt": "2025-09-12T18:20:14.762Z",
+        "updatedAt": "2025-09-12T18:20:14.762Z"
+      },
+      {
+        "objectId": "g3X1mIRCQ5",
+        "carrier": "AMERICAN AMICABLE",
+        "carrier_status_matching": {
+          "__type": "Pointer",
+          "className": "APPStatus",
+          "objectId": "WdArrGsL41"
+        },
+        "carrier_status_raw": "infnottaken",
+        "createdAt": "2025-09-12T18:20:14.763Z",
+        "updatedAt": "2025-09-12T18:20:14.763Z"
+      },
+      {
+        "objectId": "0u6wIA2IJZ",
+        "carrier": "AMERICAN AMICABLE",
+        "carrier_status_matching": {
+          "__type": "Pointer",
+          "className": "APPStatus",
+          "objectId": "TkPVtxiFmh"
+        },
+        "carrier_status_raw": "withdrawn",
+        "createdAt": "2025-09-12T18:20:14.773Z",
+        "updatedAt": "2025-09-12T18:20:14.773Z"
+      },
+      {
+        "objectId": "ov8NCE2fAw",
+        "carrier": "AMERICAN AMICABLE",
+        "carrier_status_matching": {
+          "__type": "Pointer",
+          "className": "APPStatus",
+          "objectId": "mrEgC2mecE"
+        },
+        "carrier_status_raw": "active",
+        "createdAt": "2025-09-12T18:20:14.778Z",
+        "updatedAt": "2025-09-12T18:20:14.778Z"
+      },
+      {
+        "objectId": "M4LrdAU1x1",
+        "carrier": "AMERICAN AMICABLE",
+        "carrier_status_matching": {
+          "__type": "Pointer",
+          "className": "APPStatus",
+          "objectId": "mWEHTrRSAl"
+        },
+        "carrier_status_raw": "decline",
+        "createdAt": "2025-09-12T18:20:29.261Z",
+        "updatedAt": "2025-09-12T18:20:29.261Z"
+      },
+      {
+        "objectId": "iGlDMxeqMP",
+        "carrier": "AMERICAN AMICABLE",
+        "carrier_status_matching": {
+          "__type": "Pointer",
+          "className": "APPStatus",
+          "objectId": "mWEHTrRSAl"
+        },
+        "carrier_status_raw": "returned",
+        "createdAt": "2025-09-12T18:20:29.262Z",
+        "updatedAt": "2025-09-12T18:20:29.262Z"
+      },
+      {
+        "objectId": "bzwM3zHdhL",
+        "carrier": "AMERICAN AMICABLE",
+        "carrier_status_matching": {
+          "__type": "Pointer",
+          "className": "APPStatus",
+          "objectId": "WdArrGsL41"
+        },
+        "carrier_status_raw": "incomplete",
+        "createdAt": "2025-09-12T18:20:29.257Z",
+        "updatedAt": "2025-09-12T18:20:29.257Z"
+      },
+      {
+        "objectId": "wDj9rZnTA5",
+        "carrier": "AMERICAN AMICABLE",
+        "carrier_status_matching": {
+          "__type": "Pointer",
+          "className": "APPStatus",
+          "objectId": "0RbSxm2Uri"
+        },
+        "carrier_status_raw": "issued",
+        "createdAt": "2025-09-12T18:20:29.267Z",
+        "updatedAt": "2025-09-12T18:20:29.267Z"
+      },
+      {
+        "objectId": "hQ6x6Nss1j",
+        "carrier": "AMERICAN AMICABLE",
+        "carrier_status_matching": {
+          "__type": "Pointer",
+          "className": "APPStatus",
+          "objectId": "mWEHTrRSAl"
+        },
+        "carrier_status_raw": "declined",
+        "createdAt": "2025-09-12T18:20:29.259Z",
+        "updatedAt": "2025-09-12T18:20:29.259Z"
+      },
+      {
+        "objectId": "Uhwc2au7IX",
+        "carrier": "AMERICAN AMICABLE",
+        "carrier_status_matching": {
+          "__type": "Pointer",
+          "className": "APPStatus",
+          "objectId": "jgFUNHk1qq"
+        },
+        "carrier_status_raw": "paid",
+        "createdAt": "2025-09-12T18:20:54.758Z",
+        "updatedAt": "2025-09-12T18:20:54.758Z"
+      },
+      {
+        "objectId": "Cr5FQMlAnR",
+        "carrier": "AMERICAN AMICABLE",
+        "carrier_status_matching": {
+          "__type": "Pointer",
+          "className": "APPStatus",
+          "objectId": "bZ5HXRwLeY"
+        },
+        "carrier_status_raw": "delivered",
+        "createdAt": "2025-09-12T18:20:54.761Z",
+        "updatedAt": "2025-09-12T18:20:54.761Z"
+      },
+      {
+        "objectId": "mcNyyLJuUw",
+        "carrier": "AMERICAN AMICABLE",
+        "carrier_status_matching": {
+          "__type": "Pointer",
+          "className": "APPStatus",
+          "objectId": "C1CSv4vukD"
+        },
+        "carrier_status_raw": "submitted",
+        "createdAt": "2025-09-12T18:20:54.759Z",
+        "updatedAt": "2025-09-12T18:20:54.759Z"
+      },
+      {
+        "objectId": "kLZtayVrqw",
+        "carrier": "AMERICAN AMICABLE",
+        "carrier_status_matching": {
+          "__type": "Pointer",
+          "className": "APPStatus",
+          "objectId": "eaUE08sBVC"
+        },
+        "carrier_status_raw": "approved",
+        "createdAt": "2025-09-12T18:20:54.763Z",
+        "updatedAt": "2025-09-12T18:20:54.763Z"
+      }
+    ],
+    "AppStatusUpdate": []
+  },
+  "migrationInstructions": {
+    "description": "Updated complete database export with schema and data (excluding _User and _Role)",
+    "steps": [
+      "1. Create schemas in target app using the 'schemas' section",
+      "2. Import data using the 'data' section",
+      "3. Update any objectId references if needed",
+      "4. Verify ACL permissions are set correctly",
+      "5. Test relationships between classes"
+    ],
+    "notes": [
+      "APPStatus records have public read ACL (auth required for write)",
+      "AppStatusLog.status_now points to APPStatus records",
+      "AppStatusMatching.carrier_status_matching points to APPStatus records",
+      "AppStatusUpdate.carrier_status_match points to APPStatus records",
+      "AppStatusMatching now contains 24 AMERICAN AMICABLE carrier mappings",
+      "Other classes (AppStatusLog, AppStatusUpdate) are currently empty",
+      "ObjectIds will change when importing to new app - update references accordingly"
+    ],
+    "changesFromPreviousVersion": [
+      "Added 24 AppStatusMatching records for AMERICAN AMICABLE carrier",
+      "Updated schema definitions to reflect current field structures",
+      "Excluded _User and _Role tables as requested",
+      "Updated export timestamp and version number"
+    ]
+  }
+}

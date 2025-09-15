@@ -3,9 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './components/ui/select';
 import { Button } from './components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from './components/ui/card';
-import { Upload, FileSpreadsheet, Database, FileText } from 'lucide-react';
-import DatabaseManager from './components/DatabaseManager';
-import CSVProcessor from './components/CSVProcessor';
+import { Upload, FileSpreadsheet } from 'lucide-react';
 import SimpleTest from './components/SimpleTest';
 
 export default function App() {
@@ -46,20 +44,6 @@ export default function App() {
                   className="px-8 py-3 bg-blue-300 text-white data-[state=active]:bg-blue-400"
                 >
                   List
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="database" 
-                  className="px-8 py-3 bg-green-500 text-white data-[state=active]:bg-green-600"
-                >
-                  <Database className="w-4 h-4 mr-2" />
-                  Database
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="csv-processor" 
-                  className="px-8 py-3 bg-purple-500 text-white data-[state=active]:bg-purple-600"
-                >
-                  <FileText className="w-4 h-4 mr-2" />
-                  CSV Processor
                 </TabsTrigger>
               </TabsList>
             </div>
@@ -168,13 +152,7 @@ export default function App() {
             </Card>
           </TabsContent>
 
-          <TabsContent value="database">
-            <DatabaseManager />
-          </TabsContent>
 
-          <TabsContent value="csv-processor">
-            <CSVProcessor />
-          </TabsContent>
         </Tabs>
       </div>
     </div>

@@ -1,0 +1,56 @@
+{
+  "className": "AppStatusLog",
+  "fields": {
+    "objectId": {
+      "type": "String"
+    },
+    "createdAt": {
+      "type": "Date"
+    },
+    "updatedAt": {
+      "type": "Date"
+    },
+    "ACL": {
+      "type": "ACL"
+    },
+    "APP": {
+      "type": "String"
+    },
+    "status_before": {
+      "type": "String"
+    },
+    "status_change_date": {
+      "type": "Date"
+    },
+    "status_now": {
+      "type": "Pointer",
+      "targetClass": "APPStatus"
+    }
+  },
+  "classLevelPermissions": {
+    "find": {
+      "*": true
+    },
+    "count": {
+      "*": true
+    },
+    "get": {
+      "*": true
+    },
+    "create": {
+      "*": true
+    },
+    "update": {
+      "*": true
+    },
+    "delete": {
+      "*": true
+    },
+    "addField": {
+      "*": true
+    },
+    "protectedFields": {
+      "*": []
+    }
+  }
+}

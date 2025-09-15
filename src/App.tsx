@@ -1,9 +1,12 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './components/ui/select';
 import { Button } from './components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from './components/ui/card';
-import { Upload, FileSpreadsheet } from 'lucide-react';
+import { Upload, FileSpreadsheet, Database, FileText } from 'lucide-react';
+import DatabaseManager from './components/DatabaseManager';
+import CSVProcessor from './components/CSVProcessor';
+import SimpleTest from './components/SimpleTest';
 
 export default function App() {
   const [selectedCompany, setSelectedCompany] = useState<string>('');
@@ -22,10 +25,16 @@ export default function App() {
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="w-full">
-        <Tabs defaultValue="upload" className="w-full">
+        <Tabs defaultValue="test" className="w-full">
           <div className="w-full flex justify-center mb-4">
             <div className="bg-white shadow-sm rounded-full p-4">
               <TabsList className="flex gap-4">
+                <TabsTrigger 
+                  value="test" 
+                  className="px-8 py-3 bg-green-500 text-white data-[state=active]:bg-green-600"
+                >
+                  Test
+                </TabsTrigger>
                 <TabsTrigger 
                   value="upload" 
                   className="px-8 py-3 bg-blue-500 text-white data-[state=active]:bg-blue-600"
@@ -38,9 +47,27 @@ export default function App() {
                 >
                   List
                 </TabsTrigger>
+                <TabsTrigger 
+                  value="database" 
+                  className="px-8 py-3 bg-green-500 text-white data-[state=active]:bg-green-600"
+                >
+                  <Database className="w-4 h-4 mr-2" />
+                  Database
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="csv-processor" 
+                  className="px-8 py-3 bg-purple-500 text-white data-[state=active]:bg-purple-600"
+                >
+                  <FileText className="w-4 h-4 mr-2" />
+                  CSV Processor
+                </TabsTrigger>
               </TabsList>
             </div>
           </div>
+
+          <TabsContent value="test">
+            <SimpleTest />
+          </TabsContent>
 
           <TabsContent value="upload">
             <Card className="bg-white shadow-sm p-6">
@@ -139,6 +166,14 @@ export default function App() {
                 <p className="text-gray-500">Lista de arquivos enviados aparecerá aqui.</p>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="database">
+            <DatabaseManager />
+          </TabsContent>
+
+          <TabsContent value="csv-processor">
+            <CSVProcessor />
           </TabsContent>
         </Tabs>
       </div>

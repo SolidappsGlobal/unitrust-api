@@ -1,16 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* Custom styles for active tabs */
-button[data-state="active"] {
-  color: white !important;
-}
-
-button[data-state="active"] svg {
-  color: white !important;
-}
-
 /*! tailwindcss v4.1.3 | MIT License | https://tailwindcss.com */
 @layer properties {
   @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
@@ -73,25 +60,36 @@ button[data-state="active"] svg {
   :root, :host {
     --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --color-red-50: oklch(.971 .013 17.38);
+    --color-red-200: oklch(.885 .062 18.334);
+    --color-red-600: oklch(.577 .245 27.325);
+    --color-red-700: oklch(.505 .213 27.518);
+    --color-green-50: oklch(.982 .018 155.826);
+    --color-green-200: oklch(.925 .084 155.995);
+    --color-green-600: oklch(.627 .194 149.214);
+    --color-green-700: oklch(.527 .154 150.069);
     --color-blue-50: oklch(.97 .014 254.604);
     --color-blue-100: oklch(.932 .032 255.585);
-    --color-blue-300: oklch(.809 .105 251.813);
     --color-blue-400: oklch(.707 .165 254.624);
     --color-blue-500: oklch(.623 .214 259.815);
     --color-blue-600: oklch(.546 .245 262.881);
     --color-blue-700: oklch(.488 .243 264.376);
     --color-gray-50: oklch(.985 .002 247.839);
     --color-gray-100: oklch(.967 .003 264.542);
+    --color-gray-200: oklch(.928 .006 264.531);
     --color-gray-300: oklch(.872 .01 258.338);
     --color-gray-400: oklch(.707 .022 261.325);
     --color-gray-500: oklch(.551 .027 264.364);
+    --color-gray-600: oklch(.446 .03 256.802);
+    --color-gray-900: oklch(.21 .034 264.665);
     --color-black: #000;
     --color-white: #fff;
     --spacing: .25rem;
+    --container-xs: 20rem;
     --container-sm: 24rem;
+    --container-md: 28rem;
     --container-lg: 32rem;
-    --container-2xl: 42rem;
-    --container-4xl: 56rem;
+    --container-6xl: 72rem;
     --text-xs: .75rem;
     --text-xs--line-height: calc(1 / .75);
     --text-sm: .875rem;
@@ -101,7 +99,9 @@ button[data-state="active"] svg {
     --text-lg: 1.125rem;
     --text-lg--line-height: calc(1.75 / 1.125);
     --text-xl: 1.25rem;
+    --text-xl--line-height: calc(1.75 / 1.25);
     --text-2xl: 1.5rem;
+    --text-2xl--line-height: calc(2 / 1.5);
     --font-weight-normal: 400;
     --font-weight-medium: 500;
     --font-weight-semibold: 600;
@@ -643,6 +643,14 @@ button[data-state="active"] svg {
     margin-top: calc(var(--spacing) * -4);
   }
 
+  .mt-0 {
+    margin-top: calc(var(--spacing) * 0);
+  }
+
+  .mt-1 {
+    margin-top: calc(var(--spacing) * 1);
+  }
+
   .mt-1\.5 {
     margin-top: calc(var(--spacing) * 1.5);
   }
@@ -655,12 +663,28 @@ button[data-state="active"] svg {
     margin-top: calc(var(--spacing) * 4);
   }
 
+  .mt-6 {
+    margin-top: calc(var(--spacing) * 6);
+  }
+
   .mt-auto {
     margin-top: auto;
   }
 
   .mr-2 {
     margin-right: calc(var(--spacing) * 2);
+  }
+
+  .mb-2 {
+    margin-bottom: calc(var(--spacing) * 2);
+  }
+
+  .mb-4 {
+    margin-bottom: calc(var(--spacing) * 4);
+  }
+
+  .mb-6 {
+    margin-bottom: calc(var(--spacing) * 6);
   }
 
   .mb-8 {
@@ -673,6 +697,10 @@ button[data-state="active"] svg {
 
   .ml-1 {
     margin-left: calc(var(--spacing) * 1);
+  }
+
+  .ml-2 {
+    margin-left: calc(var(--spacing) * 2);
   }
 
   .ml-auto {
@@ -808,10 +836,6 @@ button[data-state="active"] svg {
     height: calc(var(--spacing) * 5);
   }
 
-  .h-6 {
-    height: calc(var(--spacing) * 6);
-  }
-
   .h-7 {
     height: calc(var(--spacing) * 7);
   }
@@ -936,10 +960,6 @@ button[data-state="active"] svg {
     width: calc(var(--spacing) * 5);
   }
 
-  .w-6 {
-    width: calc(var(--spacing) * 6);
-  }
-
   .w-8 {
     width: calc(var(--spacing) * 8);
   }
@@ -950,6 +970,10 @@ button[data-state="active"] svg {
 
   .w-12 {
     width: calc(var(--spacing) * 12);
+  }
+
+  .w-56 {
+    width: calc(var(--spacing) * 56);
   }
 
   .w-64 {
@@ -988,12 +1012,8 @@ button[data-state="active"] svg {
     max-width: var(--skeleton-width);
   }
 
-  .max-w-2xl {
-    max-width: var(--container-2xl);
-  }
-
-  .max-w-4xl {
-    max-width: var(--container-4xl);
+  .max-w-6xl {
+    max-width: var(--container-6xl);
   }
 
   .max-w-\[calc\(100\%-2rem\)\] {
@@ -1002,6 +1022,14 @@ button[data-state="active"] svg {
 
   .max-w-max {
     max-width: max-content;
+  }
+
+  .max-w-md {
+    max-width: var(--container-md);
+  }
+
+  .max-w-xs {
+    max-width: var(--container-xs);
   }
 
   .min-w-0 {
@@ -1030,6 +1058,10 @@ button[data-state="active"] svg {
 
   .min-w-\[12rem\] {
     min-width: 12rem;
+  }
+
+  .min-w-\[100px\] {
+    min-width: 100px;
   }
 
   .min-w-\[var\(--radix-select-trigger-width\)\] {
@@ -1188,8 +1220,8 @@ button[data-state="active"] svg {
     grid-auto-rows: min-content;
   }
 
-  .grid-cols-1 {
-    grid-template-columns: repeat(1, minmax(0, 1fr));
+  .grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .grid-cols-\[0_1fr\] {
@@ -1272,6 +1304,12 @@ button[data-state="active"] svg {
     gap: calc(var(--spacing) * 6);
   }
 
+  :where(.space-y-2 > :not(:last-child)) {
+    --tw-space-y-reverse: 0;
+    margin-block-start: calc(calc(var(--spacing) * 2) * var(--tw-space-y-reverse));
+    margin-block-end: calc(calc(var(--spacing) * 2) * calc(1 - var(--tw-space-y-reverse)));
+  }
+
   :where(.space-y-4 > :not(:last-child)) {
     --tw-space-y-reverse: 0;
     margin-block-start: calc(calc(var(--spacing) * 4) * var(--tw-space-y-reverse));
@@ -1302,6 +1340,12 @@ button[data-state="active"] svg {
     justify-self: flex-end;
   }
 
+  .truncate {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
   .overflow-auto {
     overflow: auto;
   }
@@ -1320,6 +1364,10 @@ button[data-state="active"] svg {
 
   .overflow-y-auto {
     overflow-y: auto;
+  }
+
+  .rounded {
+    border-radius: .25rem;
   }
 
   .rounded-\[2px\] {
@@ -1415,8 +1463,8 @@ button[data-state="active"] svg {
     border-color: var(--color-border);
   }
 
-  .border-blue-300 {
-    border-color: var(--color-blue-300);
+  .border-blue-400 {
+    border-color: var(--color-blue-400);
   }
 
   .border-border\/50 {
@@ -1429,8 +1477,16 @@ button[data-state="active"] svg {
     }
   }
 
+  .border-gray-200 {
+    border-color: var(--color-gray-200);
+  }
+
   .border-gray-300 {
     border-color: var(--color-gray-300);
+  }
+
+  .border-green-200 {
+    border-color: var(--color-green-200);
   }
 
   .border-input {
@@ -1439,6 +1495,10 @@ button[data-state="active"] svg {
 
   .border-primary {
     border-color: var(--primary);
+  }
+
+  .border-red-200 {
+    border-color: var(--color-red-200);
   }
 
   .border-sidebar-border {
@@ -1487,12 +1547,12 @@ button[data-state="active"] svg {
     background-color: var(--color-blue-100);
   }
 
-  .bg-blue-300 {
-    background-color: var(--color-blue-300);
-  }
-
   .bg-blue-500 {
     background-color: var(--color-blue-500);
+  }
+
+  .bg-blue-600 {
+    background-color: var(--color-blue-600);
   }
 
   .bg-border {
@@ -1519,8 +1579,8 @@ button[data-state="active"] svg {
     background-color: var(--color-gray-100);
   }
 
-  .bg-gray-400 {
-    background-color: var(--color-gray-400);
+  .bg-green-50 {
+    background-color: var(--color-green-50);
   }
 
   .bg-input-background {
@@ -1557,6 +1617,10 @@ button[data-state="active"] svg {
     .bg-primary\/20 {
       background-color: color-mix(in oklab, var(--primary) 20%, transparent);
     }
+  }
+
+  .bg-red-50 {
+    background-color: var(--color-red-50);
   }
 
   .bg-secondary {
@@ -1655,10 +1719,6 @@ button[data-state="active"] svg {
     padding-inline: calc(var(--spacing) * 6);
   }
 
-  .px-8 {
-    padding-inline: calc(var(--spacing) * 8);
-  }
-
   .py-0\.5 {
     padding-block: calc(var(--spacing) * .5);
   }
@@ -1685,6 +1745,10 @@ button[data-state="active"] svg {
 
   .py-6 {
     padding-block: calc(var(--spacing) * 6);
+  }
+
+  .py-12 {
+    padding-block: calc(var(--spacing) * 12);
   }
 
   .pt-0 {
@@ -1717,6 +1781,10 @@ button[data-state="active"] svg {
 
   .pr-8 {
     padding-right: calc(var(--spacing) * 8);
+  }
+
+  .pr-10 {
+    padding-right: calc(var(--spacing) * 10);
   }
 
   .pb-3 {
@@ -1759,6 +1827,11 @@ button[data-state="active"] svg {
     font-family: var(--font-mono);
   }
 
+  .text-2xl {
+    font-size: var(--text-2xl);
+    line-height: var(--tw-leading, var(--text-2xl--line-height));
+  }
+
   .text-base {
     font-size: var(--text-base);
     line-height: var(--tw-leading, var(--text-base--line-height));
@@ -1772,6 +1845,11 @@ button[data-state="active"] svg {
   .text-sm {
     font-size: var(--text-sm);
     line-height: var(--tw-leading, var(--text-sm--line-height));
+  }
+
+  .text-xl {
+    font-size: var(--text-xl);
+    line-height: var(--tw-leading, var(--text-xl--line-height));
   }
 
   .text-xs {
@@ -1829,6 +1907,10 @@ button[data-state="active"] svg {
     color: var(--accent-foreground);
   }
 
+  .text-blue-500 {
+    color: var(--color-blue-500);
+  }
+
   .text-blue-600 {
     color: var(--color-blue-600);
   }
@@ -1861,6 +1943,22 @@ button[data-state="active"] svg {
     color: var(--color-gray-500);
   }
 
+  .text-gray-600 {
+    color: var(--color-gray-600);
+  }
+
+  .text-gray-900 {
+    color: var(--color-gray-900);
+  }
+
+  .text-green-600 {
+    color: var(--color-green-600);
+  }
+
+  .text-green-700 {
+    color: var(--color-green-700);
+  }
+
   .text-muted-foreground {
     color: var(--muted-foreground);
   }
@@ -1875,6 +1973,14 @@ button[data-state="active"] svg {
 
   .text-primary-foreground {
     color: var(--primary-foreground);
+  }
+
+  .text-red-600 {
+    color: var(--color-red-600);
+  }
+
+  .text-red-700 {
+    color: var(--color-red-700);
   }
 
   .text-secondary-foreground {
@@ -2429,6 +2535,12 @@ button[data-state="active"] svg {
   }
 
   @media (hover: hover) {
+    .hover\:bg-blue-700:hover {
+      background-color: var(--color-blue-700);
+    }
+  }
+
+  @media (hover: hover) {
     .hover\:bg-destructive\/90:hover {
       background-color: var(--destructive);
     }
@@ -2437,12 +2549,6 @@ button[data-state="active"] svg {
       .hover\:bg-destructive\/90:hover {
         background-color: color-mix(in oklab, var(--destructive) 90%, transparent);
       }
-    }
-  }
-
-  @media (hover: hover) {
-    .hover\:bg-gray-500:hover {
-      background-color: var(--color-gray-500);
     }
   }
 
@@ -2515,6 +2621,12 @@ button[data-state="active"] svg {
   @media (hover: hover) {
     .hover\:text-foreground:hover {
       color: var(--foreground);
+    }
+  }
+
+  @media (hover: hover) {
+    .hover\:text-gray-600:hover {
+      color: var(--color-gray-600);
     }
   }
 
@@ -2595,9 +2707,17 @@ button[data-state="active"] svg {
     color: var(--primary-foreground);
   }
 
+  .focus\:text-red-600:focus {
+    color: var(--color-red-600);
+  }
+
   .focus\:ring-2:focus {
     --tw-ring-shadow: var(--tw-ring-inset, ) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+
+  .focus\:ring-blue-500:focus {
+    --tw-ring-color: var(--color-blue-500);
   }
 
   .focus\:ring-ring:focus {
@@ -2713,10 +2833,6 @@ button[data-state="active"] svg {
 
   .disabled\:cursor-not-allowed:disabled {
     cursor: not-allowed;
-  }
-
-  .disabled\:bg-gray-300:disabled {
-    background-color: var(--color-gray-300);
   }
 
   .disabled\:opacity-50:disabled {
@@ -3121,16 +3237,21 @@ button[data-state="active"] svg {
     gap: calc(var(--spacing) * 2);
   }
 
-  .data-\[state\=active\]\:bg-blue-400[data-state="active"] {
-    background-color: var(--color-blue-400);
-  }
-
-  .data-\[state\=active\]\:bg-blue-600[data-state="active"] {
-    background-color: var(--color-blue-600);
+  .data-\[state\=active\]\:bg-blue-500[data-state="active"] {
+    background-color: var(--color-blue-500);
   }
 
   .data-\[state\=active\]\:bg-card[data-state="active"] {
     background-color: var(--card);
+  }
+
+  .data-\[state\=active\]\:text-white[data-state="active"] {
+    color: var(--color-white);
+  }
+
+  .data-\[state\=active\]\:shadow-sm[data-state="active"] {
+    --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, #0000001a), 0 1px 2px -1px var(--tw-shadow-color, #0000001a);
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
 
   .data-\[state\=checked\]\:translate-x-\[calc\(100\%-2px\)\][data-state="checked"] {
@@ -3205,6 +3326,16 @@ button[data-state="active"] svg {
 
   .data-\[state\=hidden\]\:fade-out[data-state="hidden"] {
     --tw-exit-opacity: 0;
+  }
+
+  .data-\[state\=inactive\]\:text-gray-600[data-state="inactive"] {
+    color: var(--color-gray-600);
+  }
+
+  @media (hover: hover) {
+    .data-\[state\=inactive\]\:hover\:text-gray-900[data-state="inactive"]:hover {
+      color: var(--color-gray-900);
+    }
   }
 
   .data-\[state\=on\]\:bg-accent[data-state="on"] {
@@ -3559,12 +3690,6 @@ button[data-state="active"] svg {
   @media (width >= 48rem) {
     .md\:w-auto {
       width: auto;
-    }
-  }
-
-  @media (width >= 48rem) {
-    .md\:grid-cols-2 {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 

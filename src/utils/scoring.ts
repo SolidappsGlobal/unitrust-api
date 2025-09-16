@@ -9,6 +9,7 @@ export interface MatchingData {
   lastName?: string;
   policyValue?: number;
   agentNumber?: string;
+  carrier?: string;
 }
 
 export interface ScoreBreakdown {
@@ -65,7 +66,7 @@ export function calculateMatchingScore(
 
   const matchingFields: string[] = [];
 
-  // Core Fields (máximo 80 pontos)
+  // Campos principais (máx. 80 pontos)
   
   // 1. PolicyNumber (+20 pontos)
   if (csvData.policyNumber && appData.policyNumber) {
@@ -107,10 +108,10 @@ export function calculateMatchingScore(
     }
   }
 
-  // Conditional Fields (só contam se todos os 4 core fields fizeram match)
-  const coreFieldsMatch = matchingFields.length === 4;
+  // Campos condicionais (somente se algum dos principais coincidirem)
+  const hasMainFieldMatch = matchingFields.length > 0;
   
-  if (coreFieldsMatch) {
+  if (hasMainFieldMatch) {
     // 5. Policy Value (+20 pontos)
     if (csvData.policyValue && appData.policyValue) {
       const csvValue = Number(csvData.policyValue);
@@ -135,14 +136,27 @@ export function calculateMatchingScore(
   // Calcular total
   scoreBreakdown.total = Object.values(scoreBreakdown).reduce((sum, value) => sum + value, 0);
 
-  // Classificação baseada no score
+  // Verificar campos mandatórios para auto-confirmação
+  const hasMandatoryFields = scoreBreakdown.policyNumber > 0 && scoreBreakdown.agentNumber > 0;
+
+  // Classificação baseada nas regras de negócio:
+  // 1. Policy + Agent found → Auto Confirm
+  // 2. ≥ 60% (no tie) → Auto Confirm  
+  // 3. Tie on score → Manual Review
+  // 4. < 60% → Manual Review or New Record
   let classification: 'auto_confirm' | 'manual_review' | 'new_record';
   
-  if (scoreBreakdown.total > 80) {
+  if (hasMandatoryFields) {
+    // Policy + Agent found → Auto Confirm
     classification = 'auto_confirm';
-  } else if (scoreBreakdown.total >= 50) {
+  } else if (scoreBreakdown.total >= 60) {
+    // ≥ 60% → Auto Confirm
+    classification = 'auto_confirm';
+  } else if (scoreBreakdown.total >= 40) {
+    // 40-59% → Manual Review
     classification = 'manual_review';
   } else {
+    // < 40% → New Record
     classification = 'new_record';
   }
 
@@ -163,7 +177,7 @@ export async function processCSVMatching(
 
   // Buscar todos os APPs para comparação
   const { queryData } = await import('./database');
-  const apps = await queryData('APP');
+  const apps = await queryData('app_tests');
   
   for (let i = 0; i < csvData.length; i++) {
     const csvRecord = csvData[i];
@@ -174,6 +188,7 @@ export async function processCSVMatching(
 
     // Comparar com todos os APPs
     for (const app of apps) {
+      // Mapear campos reais da tabela app_tests
       const appData: MatchingData = {
         policyNumber: app.get('policyNumber'),
         phone: app.get('phone'),
@@ -181,7 +196,8 @@ export async function processCSVMatching(
         firstName: app.get('firstName'),
         lastName: app.get('lastName'),
         policyValue: app.get('policyValue'),
-        agentNumber: app.get('agentNumber')
+        agentNumber: app.get('agentNumber'),
+        carrier: app.get('Carrier')
       };
 
       const matchResult = calculateMatchingScore(csvRecord, appData);

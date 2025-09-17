@@ -66,19 +66,19 @@ export default function CSVUploadProcessor() {
     }
   };
 
-  // Função para normalizar strings para comparação
+  // Function to normalize strings for comparison
   const normalizeString = (str: string | undefined): string => {
     if (!str) return '';
     return str.toString().toLowerCase().trim().replace(/[^a-z0-9]/g, '');
   };
 
-  // Função para normalizar números de telefone
+  // Function to normalize phone numbers
   const normalizePhone = (phone: string | undefined): string => {
     if (!phone) return '';
     return phone.replace(/[^0-9]/g, '');
   };
 
-  // Função para normalizar datas
+  // Function to normalize dates
   const normalizeDate = (date: Date | string | undefined): string => {
     if (!date) return '';
     const d = new Date(date);
@@ -86,12 +86,12 @@ export default function CSVUploadProcessor() {
     return d.toISOString().split('T')[0]; // YYYY-MM-DD
   };
 
-  // Função para calcular pontuação de matching (nova lógica)
+  // Function to calculate matching score (new logic)
   const calculateMatchScore = (csvRecord: CSVRecord, appRecord: APPRecord): MatchResult => {
     let score = 0;
     const matchingFields: string[] = [];
 
-    // Campos principais (máx. 80 pontos)
+    // Main fields (max. 80 points)
     
     // 1. PolicyNumber (+20 pontos)
     if (csvRecord.policyNumber && appRecord.policyNumber) {
@@ -169,7 +169,7 @@ export default function CSVUploadProcessor() {
     const lines = csvText.split('\n').filter(line => line.trim());
     if (lines.length < 2) return [];
 
-    // Função para parsear linha CSV considerando aspas
+    // Function to parse CSV line considering quotes
     const parseCSVLine = (line: string): string[] => {
       const result: string[] = [];
       let current = '';
@@ -300,7 +300,7 @@ export default function CSVUploadProcessor() {
           let selectedApp: APPRecord | null = null;
           let finalScore = 0;
 
-          // Variáveis para campos mandatórios (definidas fora do bloco)
+          // Variables for mandatory fields (defined outside the block)
           let hasPolicyNumber = false;
           let hasAgentNumber = false;
           let hasMandatoryFields = false;
@@ -319,23 +319,23 @@ export default function CSVUploadProcessor() {
             const topMatches = matches.filter(m => m.score === bestScore);
             const hasTie = topMatches.length > 1;
             
-            // Verificar se tem campos mandatórios (PolicyNumber + AgentNumber)
+            // Check if has mandatory fields (PolicyNumber + AgentNumber)
             hasPolicyNumber = bestMatch.matchingFields.includes('policyNumber');
             hasAgentNumber = bestMatch.matchingFields.includes('agentNumber');
             hasMandatoryFields = hasPolicyNumber && hasAgentNumber;
             
             console.log(`  📊 Melhor match: score=${bestScore}, policyNumber=${hasPolicyNumber}, agentNumber=${hasAgentNumber}, hasTie=${hasTie}, topMatches=${topMatches.length}`);
             
-            // Aplicar nova lógica de classificação
+            // Apply new classification logic
             if (hasMandatoryFields && bestScore > 80 && !hasTie) {
-              // Auto Confirm: Score > 80% + campos mandatórios + sem empate
+              // Auto Confirm: Score > 80% + mandatory fields + no tie
               console.log(`  ✅ Auto Confirm: Score > 80% + campos mandatórios + sem empate`);
               finalStatus = 'auto_confirmed';
               selectedApp = bestMatch.appRecord;
               finalScore = bestScore;
               autoConfirmed++;
             } else if (bestScore >= 50) {
-              // Manual Review: Score 50-80% OU empate na pontuação máxima
+              // Manual Review: Score 50-80% OR tie in maximum score
               if (hasTie) {
                 console.log(`  ⚠️ Manual Review: Empate na pontuação máxima (${topMatches.length} apps com score ${bestScore})`);
               } else {
@@ -371,7 +371,7 @@ export default function CSVUploadProcessor() {
             full_data: JSON.stringify(csvRecord),
             received_data: JSON.stringify(csvRecord),
             
-            // Campos do CSV para visualização
+            // CSV fields for visualization
             csvPolicyNumber: csvRecord.policyNumber,
             csvAgentNumber: csvRecord.agentNumber,
             csvFirstName: csvRecord.firstName,
@@ -412,7 +412,7 @@ export default function CSVUploadProcessor() {
             console.log(`❌ Não relacionando com app_tests: score=${finalScore}, hasMandatory=${hasPolicyNumber && hasAgentNumber}, matches=${matches.length}`);
           }
 
-          // Só adicionar date_confirmed se for auto_confirmed
+          // Only add date_confirmed if auto_confirmed
           if (finalStatus === 'auto_confirmed') {
             appStatusUpdate.date_confirmed = {
               __type: 'Date',
@@ -420,12 +420,12 @@ export default function CSVUploadProcessor() {
             };
           }
 
-          // Só adicionar carrier_status_match se houver selectedApp
+          // Only add carrier_status_match if there is selectedApp
           if (selectedApp) {
             appStatusUpdate.carrier_status_match = {
               __type: 'Pointer',
               className: 'APPStatus',
-              objectId: 'pending' // Será atualizado depois
+              objectId: 'pending' // Will be updated later
             };
           }
 
@@ -558,11 +558,11 @@ export default function CSVUploadProcessor() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <CheckCircle className="w-5 h-5 text-green-600" />
-                  Processamento Concluído
+                  Processing Completed
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {/* Estatísticas */}
+                {/* Statistics */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   <div className="bg-blue-50 p-4 rounded-lg text-center">
                     <div className="text-2xl font-bold text-blue-600">{result.totalRecords}</div>

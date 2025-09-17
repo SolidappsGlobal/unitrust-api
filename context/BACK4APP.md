@@ -1,13 +1,13 @@
 # 🚀 Back4App Configuration - PDF Extractor API
 
-## 📋 App Criado com Sucesso!
+## 📋 App Created Successfully!
 
 **App Name:** `pdf-extractor-api`  
 **Application ID:** `mK60GEj1uzfoICD3dFxW75KZ5K77bbBoaWeeENeK`  
 **Subdomain:** `wquespdf-extractor-api.b4a.app`  
 **URL:** https://wquespdf-extractor-api.b4a.app
 
-## 🔑 Chaves de Acesso
+## 🔑 Access Keys
 
 ```json
 {
@@ -21,28 +21,28 @@
 
 ## 🌐 Web Hosting
 
-- **Status:** ✅ Ativado
+- **Status:** ✅ Enabled
 - **Subdomain:** `wquespdf-extractor-api.b4a.app`
 - **URL:** https://wquespdf-extractor-api.b4a.app
 
-## 📦 Deploy do Projeto
+## 📦 Project Deploy
 
-### Opção 1: Deploy Manual via Dashboard
-1. Acesse: https://console.back4app.com/
-2. Selecione o app `pdf-extractor-api`
-3. Vá em "Web Hosting" → "Deploy"
-4. Faça upload dos arquivos buildados
+### Option 1: Manual Deploy via Dashboard
+1. Access: https://console.back4app.com/
+2. Select the app `pdf-extractor-api`
+3. Go to "Web Hosting" → "Deploy"
+4. Upload built files
 
-### Opção 2: Deploy via CLI (se disponível)
+### Option 2: Deploy via CLI (if available)
 ```bash
-# Build do projeto
+# Build project
 npm run build
 
-# Deploy para Back4App
-# (comandos específicos do Back4App CLI)
+# Deploy to Back4App
+# (specific Back4App CLI commands)
 ```
 
-### Opção 3: Deploy via GitHub Actions
+### Option 3: Deploy via GitHub Actions
 ```yaml
 # .github/workflows/deploy.yml
 name: Deploy to Back4App
@@ -63,13 +63,13 @@ jobs:
       - name: Build
         run: npm run build
       - name: Deploy to Back4App
-        # Adicionar steps específicos do Back4App
+        # Add specific Back4App steps
 ```
 
-## 🔧 Configuração do Projeto
+## 🔧 Project Configuration
 
-### Variáveis de Ambiente
-Crie um arquivo `.env` com:
+### Environment Variables
+Create a `.env` file with:
 ```env
 VITE_PARSE_APP_ID=mK60GEj1uzfoICD3dFxW75KZ5K77bbBoaWeeENeK
 VITE_PARSE_JS_KEY=gOSZEC3DvriLcA6lUoPWULQEjTz04teaNt3yieOX
@@ -77,27 +77,27 @@ VITE_PARSE_SERVER_URL=https://parseapi.back4app.com
 VITE_PARSE_LIVE_QUERY_URL=wss://wquespdf-extractor-api.b4a.app
 ```
 
-### Parse SDK (se necessário)
+### Parse SDK (if needed)
 ```bash
 npm install parse
 ```
 
-## 📊 Monitoramento
+## 📊 Monitoring
 
 - **Dashboard:** https://console.back4app.com/
-- **Logs:** Disponível no dashboard
-- **Analytics:** Integrado no Back4App
+- **Logs:** Available in dashboard
+- **Analytics:** Integrated in Back4App
 - **Health Check:** https://wquespdf-extractor-api.b4a.app/health
 
-## 🚀 Próximos Passos
+## 🚀 Next Steps
 
-1. **Configurar variáveis de ambiente** no projeto
-2. **Fazer build** do projeto: `npm run build`
-3. **Deploy** para o Back4App
-4. **Testar** a aplicação em: https://wquespdf-extractor-api.b4a.app
+1. **Configure environment variables** in the project
+2. **Build** the project: `npm run build`
+3. **Deploy** to Back4App
+4. **Test** the application at: https://wquespdf-extractor-api.b4a.app
 
-## 📞 Suporte
+## 📞 Support
 
-- **Documentação:** https://docs.back4app.com/
+- **Documentation:** https://docs.back4app.com/
 - **Community:** https://community.back4app.com/
 - **Status:** https://status.back4app.com/

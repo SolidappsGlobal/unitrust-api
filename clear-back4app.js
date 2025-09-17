@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 
-// Script para limpar dados do Back4App
+// Script to clean Back4App data
 const BACK4APP_CONFIG = {
   applicationId: 'mK60GEj1uzfoICD3dFxW75KZ5K77bbBoaWeeENeK',
   javascriptKey: 'gOSZEC3DvriLcA6lUoPWULQEjTz04teaNt3yieOX',
   serverURL: 'https://parseapi.back4app.com'
 };
 
-// Função para fazer queries via REST API
+// Function to make queries via REST API
 async function queryData(className) {
   try {
     const url = new URL(`/classes/${className}`, BACK4APP_CONFIG.serverURL);
@@ -29,12 +29,12 @@ async function queryData(className) {
     return data.results || [];
     
   } catch (error) {
-    console.error(`❌ Erro ao query ${className}:`, error);
+    console.error(`❌ Error querying ${className}:`, error);
     throw error;
   }
 }
 
-// Função para deletar um registro específico
+// Function to delete a specific record
 async function deleteData(className, objectId) {
   try {
     const url = new URL(`/classes/${className}/${objectId}`, BACK4APP_CONFIG.serverURL);
@@ -55,98 +55,98 @@ async function deleteData(className, objectId) {
     return true;
     
   } catch (error) {
-    console.error(`❌ Erro ao deletar registro ${objectId} de ${className}:`, error);
+    console.error(`❌ Error deleting record ${objectId} from ${className}:`, error);
     throw error;
   }
 }
 
-// Função para deletar todos os registros de uma classe
+// Function to delete all records from a class
 async function deleteAllData(className) {
   try {
-    console.log(`🗑️ Iniciando limpeza da tabela ${className}...`);
+    console.log(`🗑️ Starting cleanup of table ${className}...`);
     
-    // Primeiro, buscar todos os registros
+    // First, fetch all records
     const allRecords = await queryData(className);
-    console.log(`📊 Encontrados ${allRecords.length} registros em ${className}`);
+    console.log(`📊 Found ${allRecords.length} records in ${className}`);
     
     if (allRecords.length === 0) {
-      console.log(`✅ Tabela ${className} já está vazia`);
+      console.log(`✅ Table ${className} is already empty`);
       return { deleted: 0, errors: 0 };
     }
     
     let deleted = 0;
     let errors = 0;
     
-    // Deletar cada registro individualmente
+    // Delete each record individually
     for (const record of allRecords) {
       try {
         await deleteData(className, record.objectId);
         deleted++;
-        console.log(`✅ Deletado ${deleted}/${allRecords.length}: ${record.objectId}`);
+        console.log(`✅ Deleted ${deleted}/${allRecords.length}: ${record.objectId}`);
       } catch (error) {
         errors++;
-        console.error(`❌ Erro ao deletar ${record.objectId}:`, error);
+        console.error(`❌ Error deleting ${record.objectId}:`, error);
       }
     }
     
-    console.log(`✅ Limpeza da tabela ${className} concluída: ${deleted} deletados, ${errors} erros`);
+    console.log(`✅ Table ${className} cleanup completed: ${deleted} deleted, ${errors} errors`);
     return { deleted, errors };
     
   } catch (error) {
-    console.error(`❌ Erro ao limpar tabela ${className}:`, error);
+    console.error(`❌ Error cleaning table ${className}:`, error);
     throw error;
   }
 }
 
-// Função para limpar todas as tabelas do sistema
+// Function to clean all system tables
 async function clearAllTables() {
   const tables = ['AppStatusUpdate', 'AppStatusMatching', 'AppStatusLog', 'app_tests'];
   const results = [];
   
-  console.log('🧹 Iniciando limpeza de todas as tabelas...');
+  console.log('🧹 Starting cleanup of all tables...');
   
   for (const tableName of tables) {
     try {
       const result = await deleteAllData(tableName);
       results.push({ table: tableName, ...result });
     } catch (error) {
-      console.error(`❌ Erro ao limpar tabela ${tableName}:`, error);
+      console.error(`❌ Error cleaning table ${tableName}:`, error);
       results.push({ table: tableName, deleted: 0, errors: 1, error: error.message });
     }
   }
   
-  console.log('✅ Limpeza de todas as tabelas concluída:', results);
+  console.log('✅ All tables cleanup completed:', results);
   return results;
 }
 
-// Função principal
+// Main function
 async function main() {
   const args = process.argv.slice(2);
   const tableName = args[0];
   
   try {
     if (tableName) {
-      // Limpar tabela específica
-      console.log(`🎯 Limpando tabela específica: ${tableName}`);
+      // Clean specific table
+      console.log(`🎯 Cleaning specific table: ${tableName}`);
       const result = await deleteAllData(tableName);
-      console.log(`✅ Concluído: ${result.deleted} deletados, ${result.errors} erros`);
+      console.log(`✅ Completed: ${result.deleted} deleted, ${result.errors} errors`);
     } else {
-      // Limpar todas as tabelas
-      console.log('🎯 Limpando todas as tabelas...');
+      // Clean all tables
+      console.log('🎯 Cleaning all tables...');
       const results = await clearAllTables();
       
       const totalDeleted = results.reduce((sum, r) => sum + (r.deleted || 0), 0);
       const totalErrors = results.reduce((sum, r) => sum + (r.errors || 0), 0);
       
-      console.log(`✅ Limpeza concluída: ${totalDeleted} registros deletados, ${totalErrors} erros`);
+      console.log(`✅ Cleanup completed: ${totalDeleted} records deleted, ${totalErrors} errors`);
     }
   } catch (error) {
-    console.error('❌ Erro durante a limpeza:', error);
+    console.error('❌ Error during cleanup:', error);
     process.exit(1);
   }
 }
 
-// Executar se chamado diretamente
+// Execute if called directly
 if (require.main === module) {
   main();
 }

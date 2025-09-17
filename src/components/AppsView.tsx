@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
-import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
 import { RefreshCw, Search, Database } from 'lucide-react';
@@ -22,14 +21,14 @@ interface AppRecord {
 }
 
 export default function AppsView() {
-  const [apps, setApps] = useState<AppRecord[]>([]);
-  const [filteredApps, setFilteredApps] = useState<AppRecord[]>([]);
+  const [apps, setApps] = useState([]);
+  const [filteredApps, setFilteredApps] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState<string>('');
-  const [tablesExist, setTablesExist] = useState<boolean>(false);
+  const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [tablesExist, setTablesExist] = useState(false);
 
-  // Comentado para evitar criação automática de tabelas
+  // Commented to avoid automatic table creation
   // useEffect(() => {
   //   loadData();
   // }, []);
@@ -38,7 +37,7 @@ export default function AppsView() {
     applyFilters();
   }, [apps, searchTerm]);
 
-  // Função para verificar se as tabelas existem sem criar colunas
+  // Function to check if tables exist without creating columns
   const checkTablesExist = async () => {
     try {
       console.log('🔍 Verificando se as tabelas existem...');
@@ -51,7 +50,7 @@ export default function AppsView() {
       setTablesExist(true);
       return true;
     } catch (error) {
-      console.log('⚠️ Tabela app_tests não existe ou erro ao verificar:', error);
+      console.log('⚠️ app_tests table does not exist or error checking:', error);
       setTablesExist(false);
       return false;
     }
@@ -65,8 +64,8 @@ export default function AppsView() {
       // Verificar se as tabelas existem primeiro
       const tablesExist = await checkTablesExist();
       if (!tablesExist) {
-        console.log('⚠️ Tabela app_tests não existe, não é possível carregar dados');
-        setError('Tabela app_tests não existe. Use o botão "Check Tables" primeiro.');
+        console.log('⚠️ app_tests table does not exist, cannot load data');
+        setError('app_tests table does not exist. Use the "Check Tables" button first.');
         setLoading(false);
         return;
       }
@@ -160,10 +159,13 @@ export default function AppsView() {
       <Card className="w-full">
         <CardContent className="p-12 text-center">
           <p className="text-red-500 mb-4">{error}</p>
-          <Button onClick={loadData} variant="outline">
+          <button 
+            onClick={loadData} 
+            className="px-4 py-2 border rounded bg-white hover:bg-gray-50 flex items-center"
+          >
             <RefreshCw className="w-4 h-4 mr-2" />
-            Tentar Novamente
-          </Button>
+            Try Again
+          </button>
         </CardContent>
       </Card>
     );
@@ -171,29 +173,26 @@ export default function AppsView() {
 
   return (
     <div className="w-full space-y-6">
-      {/* Cabeçalho */}
+      {/* Header */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Database className="w-5 h-5" />
             Apps (app_tests)
             <div className="flex gap-2">
-              <Button 
+              <button 
                 onClick={loadData} 
-                variant="outline" 
-                size="sm"
+                className="px-3 py-1 border rounded text-sm bg-white hover:bg-gray-50 flex items-center"
               >
                 <RefreshCw className="w-4 h-4 mr-2" />
                 Load Data
-              </Button>
-              <Button 
+              </button>
+              <button 
                 onClick={checkTablesExist} 
-                variant="outline" 
-                size="sm"
-                className="bg-green-100 hover:bg-green-200 text-green-700"
+                className="px-3 py-1 border rounded text-sm bg-green-100 hover:bg-green-200 text-green-700"
               >
                 Check Tables
-              </Button>
+              </button>
             </div>
           </CardTitle>
         </CardHeader>
@@ -206,7 +205,7 @@ export default function AppsView() {
                   placeholder="Search by Policy Number, Name, Agent ID..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
+                  className="px-10"
                 />
               </div>
             </div>

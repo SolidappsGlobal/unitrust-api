@@ -1,38 +1,38 @@
 #!/bin/bash
 
-# Script para build e deploy no Back4App
-echo "🚀 Iniciando build do PDF Extractor API..."
+# Script for build and deploy on Back4App
+echo "🚀 Starting PDF Extractor API build..."
 
-# Verificar se Docker está instalado
+# Check if Docker is installed
 if ! command -v docker &> /dev/null; then
-    echo "❌ Docker não encontrado. Por favor, instale o Docker primeiro."
+    echo "❌ Docker not found. Please install Docker first."
     exit 1
 fi
 
-# Build da imagem
-echo "📦 Construindo imagem Docker..."
+# Build image
+echo "📦 Building Docker image..."
 docker build -t pdf-extractor-api:latest .
 
 if [ $? -eq 0 ]; then
-    echo "✅ Build concluído com sucesso!"
-    echo "🐳 Imagem criada: pdf-extractor-api:latest"
+    echo "✅ Build completed successfully!"
+    echo "🐳 Image created: pdf-extractor-api:latest"
     
-    # Mostrar informações da imagem
-    echo "📊 Informações da imagem:"
+    # Show image information
+    echo "📊 Image information:"
     docker images pdf-extractor-api:latest
     
     echo ""
-    echo "🚀 Para rodar localmente:"
+    echo "🚀 To run locally:"
     echo "docker run -p 3000:80 pdf-extractor-api:latest"
     echo ""
-    echo "🌐 Acesse: http://localhost:3000"
+    echo "🌐 Access: http://localhost:3000"
     echo ""
-    echo "📋 Para deploy no Back4App:"
-    echo "1. Faça push da imagem para um registry (Docker Hub, etc.)"
-    echo "2. Configure o Back4App para usar a imagem"
-    echo "3. Defina a porta 80 como porta de entrada"
+    echo "📋 For Back4App deploy:"
+    echo "1. Push image to a registry (Docker Hub, etc.)"
+    echo "2. Configure Back4App to use the image"
+    echo "3. Set port 80 as entry port"
     
 else
-    echo "❌ Erro no build da imagem Docker"
+    echo "❌ Docker image build error"
     exit 1
 fi

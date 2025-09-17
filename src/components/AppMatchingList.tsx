@@ -9,7 +9,7 @@ import { queryData, deleteAllData, clearAllTables } from '../utils/back4app-quer
 
 interface AppMatchingRecord {
   objectId: string;
-  full_data: any; // Dados da coluna full_data
+  full_data: any; // Data from full_data column
   matchedStatus?: string;
   appPolicyNumber?: string;
   appAgentNumber?: string;
@@ -28,14 +28,14 @@ interface AppMatchingRecord {
 }
 
 export default function AppMatchingList() {
-  const [records, setRecords] = useState<AppMatchingRecord[]>([]);
-  const [filteredRecords, setFilteredRecords] = useState<AppMatchingRecord[]>([]);
+  const [records, setRecords] = useState([]);
+  const [filteredRecords, setFilteredRecords] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
   
   // Filters
-  const [activeTab, setActiveTab] = useState<'manual_review' | 'new_record' | 'confirmed'>('manual_review');
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [activeTab, setActiveTab] = useState('manual_review');
+  const [searchTerm, setSearchTerm] = useState('');
   
   // Counters
   const [counts, setCounts] = useState({
@@ -45,18 +45,18 @@ export default function AppMatchingList() {
   });
 
   // Modal states
-  const [selectedRecord, setSelectedRecord] = useState<AppMatchingRecord | null>(null);
+  const [selectedRecord, setSelectedRecord] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
-  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState<boolean>(false);
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
-  const [appDetails, setAppDetails] = useState<any[]>([]);
-  const [isClearing, setIsClearing] = useState<boolean>(false);
-  const [clearResults, setClearResults] = useState<any[]>([]);
-  const [tablesExist, setTablesExist] = useState<boolean>(false);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [appDetails, setAppDetails] = useState([]);
+  const [isClearing, setIsClearing] = useState(false);
+  const [clearResults, setClearResults] = useState([]);
+  const [tablesExist, setTablesExist] = useState(false);
 
-  // Comentado para evitar criação automática de tabelas
+  // Commented to avoid automatic table creation
   // useEffect(() => {
   //   loadData();
   // }, []);
@@ -65,28 +65,28 @@ export default function AppMatchingList() {
     applyFilters();
   }, [records, activeTab, searchTerm]);
 
-  // Função para verificar se as tabelas existem sem criar colunas
+  // Function to check if tables exist without creating columns
   const checkTablesExist = async () => {
     try {
-      console.log('🔍 Verificando se as tabelas existem...');
+      console.log('🔍 Checking if tables exist...');
       
-      // Tentar fazer uma query simples para verificar se as tabelas existem
-      // Usar limit: 0 para evitar criar colunas
+      // Try to make a simple query to check if tables exist
+      // Use limit: 0 to avoid creating columns
       const appStatusUpdates = await queryData('AppStatusUpdate', undefined, { limit: 0 });
       const appTests = await queryData('app_tests', undefined, { limit: 0 });
       
-      console.log('✅ Tabelas existem:', { appStatusUpdates: appStatusUpdates.length, appTests: appTests.length });
+      console.log('✅ Tables exist:', { appStatusUpdates: appStatusUpdates.length, appTests: appTests.length });
       setTablesExist(true);
       return true;
     } catch (error) {
-      console.log('⚠️ Tabelas não existem ou erro ao verificar:', error);
+      console.log('⚠️ Tables do not exist or error checking:', error);
       setTablesExist(false);
       return false;
     }
   };
 
   const loadExampleData = async () => {
-    // Dados de exemplo baseados no CSV
+    // Example data based on CSV
     const exampleData = [
       {
         objectId: 'example-1',
@@ -163,10 +163,10 @@ export default function AppMatchingList() {
       setError(null);
       setLoading(true);
       
-      // Verificar se as tabelas existem primeiro
+      // Check if tables exist first
       const tablesExist = await checkTablesExist();
       if (!tablesExist) {
-        console.log('⚠️ Tabelas não existem, carregando dados de exemplo...');
+        console.log('⚠️ Tables do not exist, loading example data...');
         const exampleData = await loadExampleData();
         setRecords(exampleData.map(record => ({
           objectId: record.objectId,
@@ -192,19 +192,19 @@ export default function AppMatchingList() {
       }
       
       console.log('🔄 Loading AppStatusUpdate data...');
-      // Buscar dados da tabela AppStatusUpdate
+      // Search AppStatusUpdate table data
       let appStatusUpdates = await queryData('AppStatusUpdate');
       
-      // Se não há dados, carregar dados de exemplo para teste
+      // If no data, load example data for testing
       if (appStatusUpdates.length === 0) {
         console.log('📝 No data found, loading example data...');
         appStatusUpdates = await loadExampleData();
       }
       
-      // Buscar dados da tabela AppStatusMatching para matching de status
+      // Search AppStatusMatching table for status matching
       const appStatusMatching = await queryData('AppStatusMatching');
       
-      // Buscar dados da tabela app_tests para verificar se existem apps
+      // Search app_tests table to check if apps exist
       const appTests = await queryData('app_tests');
       console.log('📊 app_tests data loaded:', appTests.length, 'records');
       
@@ -221,10 +221,10 @@ export default function AppMatchingList() {
       // Transform data to expected format
       const transformedRecords = await Promise.all(
         appStatusUpdates.map(async (record: any) => {
-          // Usar dados da coluna full_data como dados recebidos (received data)
+          // Use full_data column data as received data
           let fullData = record.full_data || {};
           
-          // Se full_data é uma string JSON, fazer parse
+          // If full_data is a JSON string, parse it
           if (typeof fullData === 'string') {
             try {
               fullData = JSON.parse(fullData);
@@ -234,7 +234,7 @@ export default function AppMatchingList() {
             }
           }
           
-          // Fallback para received_data se full_data estiver vazio
+          // Fallback to received_data if full_data is empty
           if (!fullData || Object.keys(fullData).length === 0) {
             let receivedData = record.received_data || {};
             if (typeof receivedData === 'string') {
@@ -250,14 +250,14 @@ export default function AppMatchingList() {
           
           console.log('🔍 Processed fullData for record:', record.objectId, fullData);
           
-          // Buscar dados reais do APP na tabela app_tests usando ranked_apps
+          // Search real APP data in app_tests table using ranked_apps
           let appData: any = {};
           let rankedAppsWithScores: Array<{appId: string, score: number}> = [];
           
           console.log('Record ranked_apps:', record.ranked_apps);
           if (record.ranked_apps && record.ranked_apps.length > 0) {
             try {
-              // Calcular scores para todos os apps ranked
+              // Calculate scores for all ranked apps
               rankedAppsWithScores = await Promise.all(
                 record.ranked_apps.map(async (appId: string) => {
                   const appDetails = await queryData('app_tests', undefined, { objectId: appId });
@@ -270,10 +270,10 @@ export default function AppMatchingList() {
                 })
               );
               
-              // Ordenar por score (maior primeiro)
+              // Sort by score (highest first)
               rankedAppsWithScores.sort((a, b) => b.score - a.score);
               
-              // Usar o app com maior score como app principal
+              // Use the app with highest score as main app
               const topAppId = rankedAppsWithScores[0].appId;
               const appDetails = await queryData('app_tests', undefined, { objectId: topAppId });
               if (appDetails && appDetails.length > 0) {
@@ -285,7 +285,7 @@ export default function AppMatchingList() {
             }
           } else {
             console.log('No ranked_apps found for record:', record.objectId);
-            // Tentar buscar por policyNumber como fallback
+            // Try to search by policyNumber as fallback
             try {
               const fallbackDetails = await queryData('app_tests', undefined, { policyNumber: fullData.policyNumber || fullData.PolicyNumber });
               console.log('Fallback search by policyNumber:', fallbackDetails);
@@ -300,24 +300,24 @@ export default function AppMatchingList() {
             }
           }
           
-          // Fazer matching de status usando AppStatusMatching
+          // Make status matching using AppStatusMatching
           const carrierStatusRaw = record.carrier_status_raw || fullData.carrierStatus || fullData.CarrierStatus;
           const statusMatch = appStatusMatching.find((match: any) => 
             match.carrier_status_raw === carrierStatusRaw
           );
           
-          // Calcular score baseado nos dados reais
+          // Calculate score based on real data
           const score = calculateScore(fullData, appData);
-          // Usar a classificação que já está salva no banco, ou calcular se não existir
+          // Use the classification already saved in database, or calculate if it doesn't exist
           const classification = record.classification || classifyRecord(score, record.ranked_apps, fullData, appData);
           
           const transformedRecord = {
             objectId: record.objectId,
-            // Dados da coluna full_data (received data)
+            // Data from full_data column (received data)
             full_data: fullData,
-            // Status matched usando AppStatusMatching
+            // Status matched using AppStatusMatching
             matchedStatus: statusMatch?.carrier_status_match || statusMatch?.carrier_status_matching?.display || 'Unknown',
-            // Dados do APP (dados reais da tabela app_tests)
+            // APP data (real data from app_tests table)
             appPolicyNumber: appData.policyNumber || '',
             appAgentNumber: appData.agentNumber || '',
             appAgentStatus: appData.agentStatus || '',
@@ -327,7 +327,7 @@ export default function AppMatchingList() {
             appDateOfBirth: appData.dateOfBirth || '',
             appPolicyValue: appData.policyValue || 0,
             appStatus: appData.status || '',
-            // Dados calculados
+            // Calculated data
             classification: classification,
             confirmed: record.confirmed || false,
             createdAt: record.createdAt ? (typeof record.createdAt === 'object' && record.createdAt.__type === 'Date' ? record.createdAt.iso : record.createdAt) : new Date().toISOString(),
@@ -343,7 +343,7 @@ export default function AppMatchingList() {
 
       setRecords(transformedRecords);
       
-      // Verificar se não há dados
+      // Check if there's no data
       if (appStatusUpdates.length === 0) {
         console.log('⚠️ No AppStatusUpdate records found');
         setError('No data found in AppStatusUpdate table. Please upload CSV data first.');
@@ -351,7 +351,7 @@ export default function AppMatchingList() {
         console.log('⚠️ No app_tests records found');
         setError('No app data found. Please ensure app_tests table has data.');
       } else {
-        // Verificar se os dados têm conteúdo válido
+        // Check if data has valid content
         const validRecords = transformedRecords.filter(record => 
           record.full_data && 
           Object.keys(record.full_data).length > 0 && 
@@ -375,29 +375,29 @@ export default function AppMatchingList() {
   const applyFilters = () => {
     let filtered = [...records];
 
-    // Filtro por aba ativa baseado na classificação
+    // Filter by active tab based on classification
     switch (activeTab) {
       case 'manual_review':
-        // Registros classificados como manual_review ou needs_confirmation
+        // Records classified as manual_review or needs_confirmation
         filtered = filtered.filter(record => 
           record.classification === 'manual_review' || 
           record.classification === 'needs_confirmation'
         );
         break;
       case 'new_record':
-        // Registros classificados como new_record ou no_match
+        // Records classified as new_record or no_match
         filtered = filtered.filter(record => 
           record.classification === 'new_record' || 
           record.classification === 'no_match'
         );
         break;
       case 'confirmed':
-        // Registros já confirmados
+        // Already confirmed records
         filtered = filtered.filter(record => record.confirmed === true);
         break;
     }
 
-    // Filtro por termo de busca
+    // Filter by search term
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
       filtered = filtered.filter(record => 
@@ -410,7 +410,7 @@ export default function AppMatchingList() {
       );
     }
 
-    // Calcular contadores baseados na classificação
+    // Calculate counters based on classification
         const newCounts = {
       manual_review: records.filter(r => r.classification === 'manual_review' || r.classification === 'needs_confirmation').length,
       new_record: records.filter(r => r.classification === 'new_record' || r.classification === 'no_match').length,
@@ -446,7 +446,7 @@ export default function AppMatchingList() {
     return phone.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
   };
 
-  // Função para garantir que valores sejam strings antes de renderizar
+  // Function to ensure values are strings before rendering
   const safeString = (value: any): string => {
     if (value === null || value === undefined) return '-';
     if (typeof value === 'string') return value;
@@ -463,7 +463,7 @@ export default function AppMatchingList() {
     return String(value);
   };
 
-  // Função para formatar data no formato YYYY-MM-DD para comparação
+  // Function to format date in YYYY-MM-DD format for comparison
   const formatDateForComparison = (value: any): string => {
     if (!value) return '-';
     try {
@@ -478,10 +478,10 @@ export default function AppMatchingList() {
     }
   };
 
-  // Função para comparar valores e determinar cor de fundo do texto
+  // Function to compare values and determine text background color
   const compareValues = (csvValue: any, appValue: any, fieldType: 'text' | 'phone' | 'date' | 'number' = 'text') => {
-    if (!csvValue && !appValue) return 'bg-green-100 text-green-800 px-2 py-1 rounded'; // Ambos vazios = match
-    if (!csvValue || !appValue) return 'bg-red-100 text-red-800 px-2 py-1 rounded'; // Um vazio = mismatch
+    if (!csvValue && !appValue) return 'bg-green-100 text-green-800 px-2 py-1 rounded'; // Both empty = match
+    if (!csvValue || !appValue) return 'bg-red-100 text-red-800 px-2 py-1 rounded'; // One empty = mismatch
     
     let normalizedCsv = csvValue;
     let normalizedApp = appValue;
@@ -512,7 +512,7 @@ export default function AppMatchingList() {
     return normalizedCsv === normalizedApp ? 'bg-green-100 text-green-800 px-2 py-1 rounded' : 'bg-red-100 text-red-800 px-2 py-1 rounded';
   };
 
-  // Função para calcular score baseado nos dados do CSV e APP
+  // Function to calculate score based on CSV and APP data
   const calculateScore = (csvData: any, appData: any): number => {
     let score = 0;
     
@@ -538,7 +538,7 @@ export default function AppMatchingList() {
         const csvDate = new Date(csvData.dateOfBirth);
         const appDate = new Date(appData.dateOfBirth);
         
-        // Verificar se as datas são válidas
+        // Check if dates are valid
         if (!isNaN(csvDate.getTime()) && !isNaN(appDate.getTime())) {
           const csvDOB = csvDate.toISOString().split('T')[0];
           const appDOB = appDate.toISOString().split('T')[0];
@@ -600,7 +600,7 @@ export default function AppMatchingList() {
     return score;
   };
 
-  // Função para classificar o record baseado no score e matching único
+  // Function to classify record based on score and unique matching
   const classifyRecord = (score: number, rankedApps: any[], csvData: any, appData: any): 'auto_confirm' | 'manual_review' | 'new_record' => {
     // Debug: Log classification
     console.log('Classification:', {
@@ -611,7 +611,7 @@ export default function AppMatchingList() {
       appAgentNumber: appData.agentNumber
     });
     
-    // Verificar se tem Carrier + PolicyNumber + AgentNumber match único (auto confirm)
+    // Check if has Carrier + PolicyNumber + AgentNumber unique match (auto confirm)
     const hasUniqueMatch = csvData.carrier && csvData.policyNumber && csvData.agentNumber &&
                           appData.Carrier && appData.policyNumber && appData.agentNumber &&
                           csvData.carrier.toString().toLowerCase() === appData.Carrier.toString().toLowerCase() &&
@@ -623,7 +623,7 @@ export default function AppMatchingList() {
       return 'auto_confirm';
     }
     
-    // Verificar se tem Policy + Agent match (auto confirm)
+    // Check if has Policy + Agent match (auto confirm)
     const hasPolicyAgentMatch = csvData.policyNumber && csvData.agentNumber &&
                                appData.policyNumber && appData.agentNumber &&
                                csvData.policyNumber.toString().toLowerCase() === appData.policyNumber.toString().toLowerCase() &&
@@ -634,7 +634,7 @@ export default function AppMatchingList() {
       return 'auto_confirm';
     }
     
-    // Classificação baseada no score
+    // Classification based on score
     if (score >= 80) {
       console.log('Classification: auto_confirm (high score)');
       return 'auto_confirm';
@@ -676,7 +676,7 @@ export default function AppMatchingList() {
       const details = await Promise.all(
         rankedAppsWithScores.map(async (appData, index) => {
           console.log(`Loading details for appId ${index}:`, appData.appId, 'with score:', appData.score);
-          // Buscar dados da tabela app_tests usando o appId
+          // Search app_tests table data using appId
           const appDetails = await queryData('app_tests', undefined, { objectId: appData.appId });
           console.log(`App details found for ${appData.appId}:`, appDetails);
           const appDetail = appDetails[0];
@@ -684,7 +684,7 @@ export default function AppMatchingList() {
             const result = {
               ...appDetail,
               score: appData.score, // Usar o score salvo
-              // Mapear campos da tabela app_tests
+              // Map app_tests table fields
               policyNumber: appDetail.policyNumber,
               agentNumber: appDetail.agentNumber,
               agentStatus: appDetail.agentStatus,
@@ -719,12 +719,12 @@ export default function AppMatchingList() {
       const details = await Promise.all(
         rankedApps.map(async (appId, index) => {
           console.log(`Loading details for appId ${index}:`, appId);
-          // Buscar dados da tabela app_tests usando o appId
+          // Search app_tests table data using appId
           const appDetails = await queryData('app_tests', undefined, { objectId: appId });
           console.log(`App details found for ${appId}:`, appDetails);
           const appDetail = appDetails[0];
           if (appDetail) {
-            // Calcular score baseado na comparação com os dados do CSV
+            // Calculate score based on comparison with CSV data
             const csvData = selectedRecord ? {
               policyNumber: selectedRecord.full_data.policyNumber || selectedRecord.full_data.policynumber,
               phone: selectedRecord.full_data.phone,
@@ -739,8 +739,8 @@ export default function AppMatchingList() {
             
             const result = {
               ...appDetail,
-              score: score, // Calcular score baseado na comparação
-              // Mapear campos da tabela app_tests
+              score: score, // Calculate score based on comparison
+              // Map app_tests table fields
               policyNumber: appDetail.policyNumber,
               agentNumber: appDetail.agentNumber,
               agentStatus: appDetail.agentStatus,
@@ -775,7 +775,7 @@ export default function AppMatchingList() {
     }
   };
 
-  // Função para criar log de auditoria
+  // Function to create audit log
   const createAuditLog = async (recordId: string, action: string, decision: string, details: any) => {
     try {
       const auditLog = {
@@ -786,10 +786,10 @@ export default function AppMatchingList() {
         action: action,
         details: JSON.stringify(details),
         timestamp: new Date().toISOString(),
-        user: 'system' // ou usuário logado
+        user: 'system' // or logged user
       };
       
-      // Aqui você faria a chamada para inserir o log na tabela AppStatusLog
+      // Here you would make the call to insert the log in AppStatusLog table
       // await insertData('AppStatusLog', auditLog);
       
       console.log('Audit log created:', auditLog);
@@ -798,18 +798,18 @@ export default function AppMatchingList() {
     }
   };
 
-  // Função para abrir modal de edição (Undo Update)
+  // Function to open edit modal (Undo Update)
   const handleUndoUpdate = (record: AppMatchingRecord) => {
     setSelectedRecord(record);
     setIsEditModalOpen(true);
   };
 
-  // Função para auto-confirmar um record
+  // Function to auto-confirm a record
   const handleAutoConfirm = async (record: AppMatchingRecord) => {
     try {
       console.log('Auto confirming record:', record.objectId);
       
-      // Criar log de auditoria
+      // Create audit log
       await createAuditLog(record.objectId, 'auto_confirm', 'confirmed', {
         classification: record.classification,
         csvData: {
@@ -820,18 +820,18 @@ export default function AppMatchingList() {
         }
       });
       
-      // Atualizar o record na tabela AppStatusUpdate
+      // Update the record in AppStatusUpdate table
       const updateData = {
         confirmed: true,
         date_confirmed: new Date().toISOString()
       };
       
-      // Aqui você faria a chamada para atualizar o record no Back4App
+      // Here you would make the call to update the record in Back4App
       // await updateData('AppStatusUpdate', record.objectId, updateData);
       
       console.log('Record auto-confirmed successfully');
       
-      // Recarregar os dados
+      // Reload data
       await loadData();
       
     } catch (error) {
@@ -845,7 +845,7 @@ export default function AppMatchingList() {
     try {
       console.log('Final confirmation for option:', selectedOption);
       
-      // Criar log de auditoria
+      // Create audit log
       await createAuditLog(selectedRecord.objectId, 'manual_confirm', 'confirmed', {
         selectedOption: selectedOption,
         score: selectedRecord.score,
@@ -858,18 +858,18 @@ export default function AppMatchingList() {
         }
       });
       
-      // Atualizar o record na tabela AppStatusUpdate
+      // Update the record in AppStatusUpdate table
       const updateData = {
         confirmed: true,
         date_confirmed: new Date().toISOString()
       };
       
-      // Aqui você faria a chamada para atualizar o record no Back4App
+      // Here you would make the call to update the record in Back4App
       // await updateData('AppStatusUpdate', selectedRecord.objectId, updateData);
       
       console.log('Record confirmed successfully');
       
-      // Fechar modais e recarregar dados
+      // Close modals and reload data
       setIsConfirmModalOpen(false);
       setShowModal(false);
       setSelectedRecord(null);
@@ -896,7 +896,7 @@ export default function AppMatchingList() {
     try {
       console.log('Creating record:', selectedRecord);
       
-      // Criar log de auditoria
+      // Create audit log
       await createAuditLog(selectedRecord.objectId, 'create_new', 'new_record', {
         score: selectedRecord.score,
         classification: selectedRecord.classification,
@@ -910,7 +910,7 @@ export default function AppMatchingList() {
         }
       });
       
-      // Aqui você faria a chamada para criar um novo record na tabela app_tests
+      // Here you would make the call to create a new record in app_tests table
       // const newAppData = {
       //   policyNumber: selectedRecord.full_data.policyNumber || selectedRecord.full_data.policynumber,
       //   agentNumber: selectedRecord.full_data.agentNumber || selectedRecord.full_data.agentnumber,
@@ -926,7 +926,7 @@ export default function AppMatchingList() {
       
       console.log('New record created successfully');
       
-      // Fechar modal e recarregar dados
+      // Close modal and reload data
       setIsCreateModalOpen(false);
       setSelectedRecord(null);
       await loadData();
@@ -941,54 +941,54 @@ export default function AppMatchingList() {
     setSelectedRecord(null);
   };
 
-  // Função para limpar uma tabela específica
+  // Function to clear a specific table
   const handleClearTable = async (tableName: string) => {
-    if (!confirm(`Tem certeza que deseja apagar TODOS os dados da tabela ${tableName}? Esta ação não pode ser desfeita!`)) {
+    if (!confirm(`Are you sure you want to delete ALL data from table ${tableName}? This action cannot be undone!`)) {
       return;
     }
 
     try {
       setIsClearing(true);
-      console.log(`🗑️ Limpando tabela ${tableName}...`);
+      console.log(`🗑️ Clearing table ${tableName}...`);
       
       const result = await deleteAllData(tableName);
       setClearResults(prev => [...prev, { table: tableName, ...result, timestamp: new Date().toISOString() }]);
       
-      // Recarregar dados após limpeza
+      // Reload data after clearing
       await loadData();
       
-      alert(`Tabela ${tableName} limpa com sucesso! ${result.deleted} registros deletados.`);
+      alert(`Table ${tableName} cleared successfully! ${result.deleted} records deleted.`);
     } catch (error) {
-      console.error(`Erro ao limpar tabela ${tableName}:`, error);
-      alert(`Erro ao limpar tabela ${tableName}: ${error.message}`);
+      console.error(`Error clearing table ${tableName}:`, error);
+      alert(`Error clearing table ${tableName}: ${error.message}`);
     } finally {
       setIsClearing(false);
     }
   };
 
-  // Função para limpar todas as tabelas
+  // Function to clear all tables
   const handleClearAllTables = async () => {
-    if (!confirm('Tem certeza que deseja apagar TODOS os dados de TODAS as tabelas? Esta ação não pode ser desfeita!')) {
+    if (!confirm('Are you sure you want to delete ALL data from ALL tables? This action cannot be undone!')) {
       return;
     }
 
     try {
       setIsClearing(true);
-      console.log('🧹 Limpando todas as tabelas...');
+      console.log('🧹 Clearing all tables...');
       
       const results = await clearAllTables();
       setClearResults(prev => [...prev, ...results.map((r: any) => ({ ...r, timestamp: new Date().toISOString() }))]);
       
-      // Recarregar dados após limpeza
+      // Reload data after clearing
       await loadData();
       
       const totalDeleted = results.reduce((sum: number, r: any) => sum + (r.deleted || 0), 0);
       const totalErrors = results.reduce((sum: number, r: any) => sum + (r.errors || 0), 0);
       
-      alert(`Limpeza concluída! ${totalDeleted} registros deletados, ${totalErrors} erros.`);
+      alert(`Clearing completed! ${totalDeleted} records deleted, ${totalErrors} errors.`);
     } catch (error) {
-      console.error('Erro ao limpar tabelas:', error);
-      alert(`Erro ao limpar tabelas: ${error.message}`);
+      console.error('Error clearing tables:', error);
+      alert(`Error clearing tables: ${error.message}`);
     } finally {
       setIsClearing(false);
     }
@@ -1030,67 +1030,10 @@ export default function AppMatchingList() {
             <div className="flex gap-2">
               <button 
                 onClick={loadData} 
-                className="px-3 py-1 border rounded text-sm bg-white hover:bg-gray-50"
+                className="px-3 py-1 border rounded text-sm bg-white hover:bg-gray-50 flex items-center"
               >
                 <RefreshCw className="w-4 h-4 mr-2" />
                 Load Data
-              </button>
-              <button 
-                onClick={checkTablesExist} 
-                className="px-3 py-1 border rounded text-sm bg-green-100 hover:bg-green-200 text-green-700"
-              >
-                Check Tables
-              </button>
-              <button 
-                onClick={async () => {
-                  setLoading(true);
-                  const exampleData = await loadExampleData();
-                  setRecords([]);
-                  setRecords(exampleData.map(record => ({
-                    objectId: record.objectId,
-                    full_data: JSON.parse(record.full_data),
-                    matchedStatus: 'Unknown',
-                    appPolicyNumber: '',
-                    appAgentNumber: '',
-                    appAgentStatus: '',
-                    appFirstName: '',
-                    appLastName: '',
-                    appPhone: '',
-                    appDateOfBirth: '',
-                    appPolicyValue: 0,
-                    appStatus: '',
-                    classification: record.classification as 'auto_confirm' | 'manual_review' | 'new_record',
-                    confirmed: record.confirmed,
-                    createdAt: record.createdAt,
-                    rankedApps: record.ranked_apps || [],
-                    rankedAppsWithScores: []
-                  })));
-                  setLoading(false);
-                }}
-                className="px-3 py-1 border rounded text-sm bg-blue-100 hover:bg-blue-200"
-              >
-                Load Example Data
-              </button>
-              <button 
-                onClick={() => handleClearTable('AppStatusUpdate')}
-                className="px-3 py-1 border rounded text-sm bg-red-100 hover:bg-red-200 text-red-700 disabled:opacity-50"
-                disabled={isClearing}
-              >
-                Clear AppStatusUpdate
-              </button>
-              <button 
-                onClick={() => handleClearTable('app_tests')}
-                className="px-3 py-1 border rounded text-sm bg-red-100 hover:bg-red-200 text-red-700 disabled:opacity-50"
-                disabled={isClearing}
-              >
-                Clear app_tests
-              </button>
-              <button 
-                onClick={handleClearAllTables}
-                className="px-3 py-1 border rounded text-sm bg-red-600 hover:bg-red-700 text-white disabled:opacity-50"
-                disabled={isClearing}
-              >
-                {isClearing ? 'Clearing...' : 'Clear All Tables'}
               </button>
             </div>
           </CardTitle>
@@ -1163,7 +1106,6 @@ export default function AppMatchingList() {
             <div className="text-sm text-gray-600">
               Showing {filteredRecords.length} records
               {tablesExist && <span className="ml-2 text-green-600">• Tables exist</span>}
-              {!tablesExist && <span className="ml-2 text-orange-600">• Tables not checked</span>}
             </div>
             <div className="text-sm text-gray-500">
               {activeTab === 'manual_review' && 'Records requiring manual review and app selection'}
@@ -1250,7 +1192,7 @@ export default function AppMatchingList() {
             <TableBody>
               {filteredRecords.map((record, index) => {
                 if (activeTab === 'manual_review') {
-                  // Manual Review: Mostrar dados received e botão para selecionar app
+                  // Manual Review: Show received data and button to select app
                   return (
                     <TableRow key={record.objectId} className="bg-yellow-50">
                       <TableCell>{formatDate(record.createdAt)}</TableCell>
@@ -1281,7 +1223,7 @@ export default function AppMatchingList() {
                     </TableRow>
                   );
                 } else if (activeTab === 'new_record') {
-                  // New Record: Mostrar apenas linha received com botão create
+                  // New Record: Show only received row with create button
                   return (
                     <TableRow key={record.objectId} className="bg-red-50">
                       <TableCell>{formatDate(record.createdAt)}</TableCell>
@@ -1307,7 +1249,7 @@ export default function AppMatchingList() {
                     </TableRow>
                   );
                 } else if (activeTab === 'confirmed') {
-                  // Confirmed: Mostrar apenas linha received comparando com app encontrado
+                  // Confirmed: Show only received row comparing with found app
                   return (
                     <TableRow key={record.objectId} className="bg-green-50">
                       <TableCell>{formatDate(record.createdAt)}</TableCell>

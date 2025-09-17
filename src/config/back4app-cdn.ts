@@ -1,33 +1,33 @@
-// Configurações do Back4App
+// Back4App Configuration
 export const BACK4APP_CONFIG = {
   applicationId: 'mK60GEj1uzfoICD3dFxW75KZ5K77bbBoaWeeENeK',
   javascriptKey: 'gOSZEC3DvriLcA6lUoPWULQEjTz04teaNt3yieOX',
   serverURL: 'https://parseapi.back4app.com'
 };
 
-// Função para inicializar o Parse SDK via CDN
+// Function to initialize Parse SDK via CDN
 export async function initializeParse() {
   try {
-    // Verificar se Parse já está disponível no window
+    // Check if Parse is already available in window
     if (typeof window !== 'undefined' && (window as any).Parse) {
       const Parse = (window as any).Parse;
       
-      // Verificar se já está inicializado
+      // Check if already initialized
       if (Parse.applicationId === BACK4APP_CONFIG.applicationId) {
-        console.log('✅ Parse SDK já inicializado');
+        console.log('✅ Parse SDK already initialized');
         return Parse;
       }
       
-      // Inicializar Parse
+      // Initialize Parse
       Parse.initialize(BACK4APP_CONFIG.applicationId, BACK4APP_CONFIG.javascriptKey);
       Parse.serverURL = BACK4APP_CONFIG.serverURL;
       
-      console.log('✅ Parse SDK inicializado via CDN');
+      console.log('✅ Parse SDK initialized via CDN');
       return Parse;
     }
     
-    // Se Parse não está disponível, aguardar um pouco e tentar novamente
-    console.log('⏳ Aguardando Parse SDK carregar...');
+    // If Parse is not available, wait a bit and try again
+    console.log('⏳ Waiting for Parse SDK to load...');
     await new Promise(resolve => setTimeout(resolve, 1000));
     
     if (typeof window !== 'undefined' && (window as any).Parse) {
@@ -35,17 +35,17 @@ export async function initializeParse() {
       Parse.initialize(BACK4APP_CONFIG.applicationId, BACK4APP_CONFIG.javascriptKey);
       Parse.serverURL = BACK4APP_CONFIG.serverURL;
       
-      console.log('✅ Parse SDK inicializado via CDN (retry)');
+      console.log('✅ Parse SDK initialized via CDN (retry)');
       return Parse;
     }
     
-    throw new Error('Parse SDK não está disponível no window');
+    throw new Error('Parse SDK is not available in window');
     
   } catch (error) {
-    console.error('❌ Erro ao inicializar Parse SDK:', error);
+    console.error('❌ Error initializing Parse SDK:', error);
     
-    // Retornar um mock para desenvolvimento
-    console.log('🔄 Usando modo fallback (dados mock)');
+    // Return a mock for development
+    console.log('🔄 Using fallback mode (mock data)');
     return {
       applicationId: BACK4APP_CONFIG.applicationId,
       Query: (className: string) => ({

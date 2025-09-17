@@ -1,6 +1,6 @@
-# 📊 Análise dos Dados da Tabela APP
+# 📊 APP Table Data Analysis
 
-## 🔍 **Dados Extraídos da Tabela APP:**
+## 🔍 **Data Extracted from APP Table:**
 
 | objectId | policyNumber | firstName | lastName | phone | dateOfBirth | agentNumber | status |
 |----------|--------------|-----------|----------|-------|-------------|-------------|---------|
@@ -20,27 +20,27 @@
 | vjcauEcyNR | POL007 | Daniel | Silva | (555) 111-2222 | Thu May 19 1988 | AG007 | pending |
 | wPPTEr79CP | POL010 | Gabriela | Costa | (555) 852-9637 | Tue Apr 14 1987 | AG010 | active |
 
-## 🎯 **Problemas Identificados no example.csv:**
+## 🎯 **Issues Identified in example.csv:**
 
-### **1. Formato de Data Inconsistente**
-- **Tabela APP**: `Thu Mar 14 1985 21:00:00 GMT-0300 (Brasilia Standard Time)`
+### **1. Inconsistent Date Format**
+- **APP Table**: `Thu Mar 14 1985 21:00:00 GMT-0300 (Brasilia Standard Time)`
 - **example.csv**: `03/14/1985`
-- **Problema**: O sistema não consegue fazer match das datas!
+- **Problem**: The system cannot match the dates!
 
-### **2. Falta de Cenários de Empate**
-- Todos os registros têm matches únicos
-- Não há casos para testar "precisa confirmação manual"
+### **2. Lack of Tie Scenarios**
+- All records have unique matches
+- No cases to test "needs manual confirmation"
 
-### **3. Dados Parcialmente Corretos**
-- Policy Numbers: ✅ Corretos
-- Nomes: ✅ Corretos  
-- Phones: ✅ Corretos
-- **Datas**: ❌ Formato diferente
-- Agent Numbers: ✅ Corretos
+### **3. Partially Correct Data**
+- Policy Numbers: ✅ Correct
+- Names: ✅ Correct  
+- Phones: ✅ Correct
+- **Dates**: ❌ Different format
+- Agent Numbers: ✅ Correct
 
-## 🔧 **Correções Necessárias:**
+## 🔧 **Necessary Corrections:**
 
-1. **Converter datas** para o formato da tabela APP
-2. **Criar registros duplicados** para testar empates
-3. **Adicionar registros** com dados parciais para testar pontuações diferentes
-4. **Incluir registros** que não existem na tabela APP
+1. **Convert dates** to APP table format
+2. **Create duplicate records** to test ties
+3. **Add records** with partial data to test different scores
+4. **Include records** that don't exist in APP table

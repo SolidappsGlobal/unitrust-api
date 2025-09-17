@@ -1,5 +1,5 @@
-// Algoritmo de Reliability Score & Matching
-// Baseado nas regras de negócio do documento
+// Reliability Score & Matching Algorithm
+// Based on business rules from the document
 
 export interface MatchingData {
   policyNumber?: string;
@@ -29,19 +29,19 @@ export interface MatchingResult {
   scoreBreakdown: ScoreBreakdown;
 }
 
-// Função para normalizar strings para comparação
+// Function to normalize strings for comparison
 function normalizeString(str: string | undefined): string {
   if (!str) return '';
   return str.toString().toLowerCase().trim().replace(/[^a-z0-9]/g, '');
 }
 
-// Função para normalizar números de telefone
+// Function to normalize phone numbers
 function normalizePhone(phone: string | undefined): string {
   if (!phone) return '';
   return phone.replace(/[^0-9]/g, '');
 }
 
-// Função para normalizar datas
+// Function to normalize dates
 function normalizeDate(date: Date | string | undefined): string {
   if (!date) return '';
   const d = new Date(date);
@@ -49,7 +49,7 @@ function normalizeDate(date: Date | string | undefined): string {
   return d.toISOString().split('T')[0]; // YYYY-MM-DD
 }
 
-// Função para calcular o score de matching
+// Function to calculate matching score
 export function calculateMatchingScore(
   csvData: MatchingData,
   appData: MatchingData
@@ -66,9 +66,9 @@ export function calculateMatchingScore(
 
   const matchingFields: string[] = [];
 
-  // Campos principais (máx. 80 pontos)
+  // Main fields (max. 80 points)
   
-  // 1. PolicyNumber (+20 pontos)
+  // 1. PolicyNumber (+20 points)
   if (csvData.policyNumber && appData.policyNumber) {
     const csvPolicy = normalizeString(csvData.policyNumber);
     const appPolicy = normalizeString(appData.policyNumber);
@@ -78,7 +78,7 @@ export function calculateMatchingScore(
     }
   }
 
-  // 2. Phone (+20 pontos)
+  // 2. Phone (+20 points)
   if (csvData.phone && appData.phone) {
     const csvPhone = normalizePhone(csvData.phone);
     const appPhone = normalizePhone(appData.phone);
@@ -88,7 +88,7 @@ export function calculateMatchingScore(
     }
   }
 
-  // 3. Date of Birth (+20 pontos)
+  // 3. Date of Birth (+20 points)
   if (csvData.dateOfBirth && appData.dateOfBirth) {
     const csvDOB = normalizeDate(csvData.dateOfBirth);
     const appDOB = normalizeDate(appData.dateOfBirth);
@@ -98,7 +98,7 @@ export function calculateMatchingScore(
     }
   }
 
-  // 4. Name (FirstName + LastName) (+20 pontos)
+  // 4. Name (FirstName + LastName) (+20 points)
   if (csvData.firstName && csvData.lastName && appData.firstName && appData.lastName) {
     const csvFullName = normalizeString(csvData.firstName + ' ' + csvData.lastName);
     const appFullName = normalizeString(appData.firstName + ' ' + appData.lastName);
@@ -108,11 +108,11 @@ export function calculateMatchingScore(
     }
   }
 
-  // Campos condicionais (somente se algum dos principais coincidirem)
+  // Conditional fields (only if any of the main ones match)
   const hasMainFieldMatch = matchingFields.length > 0;
   
   if (hasMainFieldMatch) {
-    // 5. Policy Value (+20 pontos)
+    // 5. Policy Value (+20 points)
     if (csvData.policyValue && appData.policyValue) {
       const csvValue = Number(csvData.policyValue);
       const appValue = Number(appData.policyValue);
@@ -122,7 +122,7 @@ export function calculateMatchingScore(
       }
     }
 
-    // 6. Agent Number (+20 pontos)
+    // 6. Agent Number (+20 points)
     if (csvData.agentNumber && appData.agentNumber) {
       const csvAgent = normalizeString(csvData.agentNumber);
       const appAgent = normalizeString(appData.agentNumber);
@@ -133,13 +133,13 @@ export function calculateMatchingScore(
     }
   }
 
-  // Calcular total
+  // Calculate total
   scoreBreakdown.total = Object.values(scoreBreakdown).reduce((sum, value) => sum + value, 0);
 
-  // Verificar campos mandatórios para auto-confirmação
+  // Check mandatory fields for auto-confirmation
   const hasMandatoryFields = scoreBreakdown.policyNumber > 0 && scoreBreakdown.agentNumber > 0;
 
-  // Classificação baseada nas regras de negócio:
+  // Classification based on business rules:
   // 1. Policy + Agent found → Auto Confirm
   // 2. ≥ 60% (no tie) → Auto Confirm  
   // 3. Tie on score → Manual Review
@@ -168,14 +168,14 @@ export function calculateMatchingScore(
   };
 }
 
-// Função para processar um CSV e fazer matching com APPs
+// Function to process a CSV and match with APPs
 export async function processCSVMatching(
   csvData: MatchingData[],
   csvUploadId: string
 ): Promise<any[]> {
   const results: any[] = [];
 
-  // Buscar todos os APPs para comparação
+  // Fetch all APPs for comparison
   const { queryData } = await import('./database');
   const apps = await queryData('app_tests');
   
@@ -186,9 +186,9 @@ export async function processCSVMatching(
     let bestMatch: MatchingResult | null = null;
     let bestApp: any = null;
 
-    // Comparar com todos os APPs
+    // Compare with all APPs
     for (const app of apps) {
-      // Mapear campos reais da tabela app_tests
+      // Map real fields from app_tests table
       const appData: MatchingData = {
         policyNumber: app.get('policyNumber'),
         phone: app.get('phone'),
@@ -202,20 +202,20 @@ export async function processCSVMatching(
 
       const matchResult = calculateMatchingScore(csvRecord, appData);
       
-      // Manter o melhor match
+      // Keep the best match
       if (!bestMatch || matchResult.score > bestMatch.score) {
         bestMatch = matchResult;
         bestApp = app;
       }
     }
 
-    // Criar resultado do matching
+    // Create matching result
     const matchingResult = {
       csvUploadId,
       csvRecordId,
       appId: bestApp ? bestApp.id : null,
       
-      // Dados do CSV
+      // CSV data
       csvPolicyNumber: csvRecord.policyNumber,
       csvPhone: csvRecord.phone,
       csvDateOfBirth: csvRecord.dateOfBirth,
@@ -224,7 +224,7 @@ export async function processCSVMatching(
       csvPolicyValue: csvRecord.policyValue,
       csvAgentNumber: csvRecord.agentNumber,
       
-      // Dados do APP (se encontrado)
+      // APP data (if found)
       appPolicyNumber: bestApp ? bestApp.get('policyNumber') : null,
       appPhone: bestApp ? bestApp.get('phone') : null,
       appDateOfBirth: bestApp ? bestApp.get('dateOfBirth') : null,
@@ -233,12 +233,12 @@ export async function processCSVMatching(
       appPolicyValue: bestApp ? bestApp.get('policyValue') : null,
       appAgentNumber: bestApp ? bestApp.get('agentNumber') : null,
       
-      // Resultado do matching
+      // Matching result
       score: bestMatch ? bestMatch.score : 0,
       classification: bestMatch ? bestMatch.classification : 'new_record',
       confirmed: false,
       
-      // Detalhes do scoring
+      // Scoring details
       matchingFields: bestMatch ? bestMatch.matchingFields : [],
       scoreBreakdown: bestMatch ? bestMatch.scoreBreakdown : {
         policyNumber: 0,
@@ -259,7 +259,7 @@ export async function processCSVMatching(
   return results;
 }
 
-// Função para inserir dados de exemplo na tabela APP
+// Function to insert sample data into APP table
 export async function insertSampleAPPs(): Promise<void> {
   const { insertData } = await import('./database');
   const sampleAPPs = [
@@ -330,9 +330,9 @@ export async function insertSampleAPPs(): Promise<void> {
   for (const appData of sampleAPPs) {
     try {
       await insertData('APP', appData);
-      console.log(`✅ APP inserido: ${appData.policyNumber}`);
+      console.log(`✅ APP inserted: ${appData.policyNumber}`);
     } catch (error) {
-      console.error(`❌ Erro ao inserir APP ${appData.policyNumber}:`, error);
+      console.error(`❌ Error inserting APP ${appData.policyNumber}:`, error);
     }
   }
 }

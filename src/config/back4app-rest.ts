@@ -1,11 +1,11 @@
-// Configurações do Back4App
+// Back4App Configuration
 export const BACK4APP_CONFIG = {
   applicationId: 'mK60GEj1uzfoICD3dFxW75KZ5K77bbBoaWeeENeK',
   javascriptKey: 'gOSZEC3DvriLcA6lUoPWULQEjTz04teaNt3yieOX',
   serverURL: 'https://parseapi.back4app.com'
 };
 
-// Função para fazer queries via REST API
+// Function to make queries via REST API
 export async function queryData(className: string, include?: string) {
   try {
     const url = new URL(`/classes/${className}`, BACK4APP_CONFIG.serverURL);
@@ -28,18 +28,18 @@ export async function queryData(className: string, include?: string) {
     }
     
     const data = await response.json();
-    console.log(`✅ Query ${className} executada com sucesso`);
+    console.log(`✅ Query ${className} executed successfully`);
     return data.results || [];
     
   } catch (error) {
-    console.error(`❌ Erro ao query ${className}:`, error);
+    console.error(`❌ Error querying ${className}:`, error);
     throw error;
   }
 }
 
-// Função para inicializar (compatibilidade com o componente)
+// Function to initialize (compatibility with component)
 export async function initializeParse() {
-  console.log('✅ Usando REST API do Back4App');
+  console.log('✅ Using Back4App REST API');
   return {
     applicationId: BACK4APP_CONFIG.applicationId,
     Query: (className: string) => ({

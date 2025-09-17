@@ -57,7 +57,7 @@ export default function App() {
   //   );
   // }
 
-  // TEMPORÁRIO: Usuário mock para pular o login
+  // TEMPORARY: Mock user to skip login
   const mockUser = { email: "admin@test.com", name: "Admin User" };
 
   return (

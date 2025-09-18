@@ -4,94 +4,114 @@ import { Badge } from './ui/badge';
 import { Input } from './ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
 import { RefreshCw, Search, Database } from 'lucide-react';
-import { queryData } from '../utils/back4app-queries';
 
 interface AppRecord {
   objectId: string;
-  policyNumber: string;
-  firstName: string;
-  lastName: string;
-  phone: string;
-  dateOfBirth: string;
-  policyValue: number;
-  agentNumber: string;
-  status: string;
-  createdAt: string;
-  updatedAt: string;
+  appCarrierWritingNumber: string; // Agent ID
+  appClient: string; // Client Name
+  appUplineUFG_Str: string; // Phone
+  appStatusDate: string; // Date of Birth
+  appPremiumAmount: number; // Policy Value
+  appStatus: string; // Status
+  appDate: string; // Created At
 }
 
 export default function AppsView() {
-  const [apps, setApps] = useState([]);
-  const [filteredApps, setFilteredApps] = useState([]);
+  const [apps, setApps] = useState<AppRecord[]>([]);
+  const [filteredApps, setFilteredApps] = useState<AppRecord[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [tablesExist, setTablesExist] = useState(false);
-
-  // Commented to avoid automatic table creation
-  // useEffect(() => {
-  //   loadData();
-  // }, []);
 
   useEffect(() => {
     applyFilters();
   }, [apps, searchTerm]);
 
-  // Function to check if tables exist without creating columns
-  const checkTablesExist = async () => {
-    try {
-      console.log('🔍 Verificando se as tabelas existem...');
-      
-      // Tentar fazer uma query simples para verificar se as tabelas existem
-      // Usar limit: 0 para evitar criar colunas
-      const appTests = await queryData('app_tests', undefined, { limit: 0 });
-      
-      console.log('✅ Tabela app_tests existe:', appTests.length);
-      setTablesExist(true);
-      return true;
-    } catch (error) {
-      console.log('⚠️ app_tests table does not exist or error checking:', error);
-      setTablesExist(false);
-      return false;
-    }
-  };
+  // Load data automatically when component mounts
+  useEffect(() => {
+    loadData();
+  }, []);
+
 
   const loadData = async () => {
     try {
       setError(null);
       setLoading(true);
       
-      // Verificar se as tabelas existem primeiro
-      const tablesExist = await checkTablesExist();
-      if (!tablesExist) {
-        console.log('⚠️ app_tests table does not exist, cannot load data');
-        setError('app_tests table does not exist. Use the "Check Tables" button first.');
-        setLoading(false);
-        return;
+      // Call the new API endpoint
+      const query = "SELECT * FROM APP";
+      
+      
+      // Add timeout to the fetch request
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+      
+      const response = await fetch('https://middlewarepostgressolid-amsqrcep.b4a.run/test', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          sql: query
+        }),
+        signal: controller.signal
+      });
+      
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const responseData = await response.json();
+      
+      // Check if responseData is an array, if not, try to extract the data
+      let appData = responseData;
+      if (!Array.isArray(responseData)) {
+        // If the response has a data property, use it
+        if (responseData.data && Array.isArray(responseData.data)) {
+          appData = responseData.data;
+        } else if (responseData.results && Array.isArray(responseData.results)) {
+          appData = responseData.results;
+        } else {
+          console.log('API Response structure:', responseData);
+          throw new Error('API response is not in expected format');
+        }
       }
       
-      // Fetch data from app_tests table
-      const appData = await queryData('app_tests');
-      
+      // Check if we have data to process
+      if (!appData || appData.length === 0) {
+        console.log('No data received from API');
+        setApps([]);
+        return;
+      }
+
       // Transform data to expected format
-      const transformedApps: AppRecord[] = appData.map((record: any) => ({
-        objectId: record.objectId || record.id,
-        policyNumber: record.policyNumber || record.get?.('policyNumber') || '',
-        firstName: record.firstName || record.get?.('firstName') || '',
-        lastName: record.lastName || record.get?.('lastName') || '',
-        phone: record.phone || record.get?.('phone') || '',
-        dateOfBirth: record.dateOfBirth || record.get?.('dateOfBirth') || '',
-        policyValue: record.policyValue || record.get?.('policyValue') || 0,
-        agentNumber: record.agentNumber || record.get?.('agentNumber') || '',
-        status: record.status || record.get?.('status') || 'Unknown',
-        createdAt: record.createdAt || record.get?.('createdAt') || '',
-        updatedAt: record.updatedAt || record.get?.('updatedAt') || ''
+      const transformedApps: AppRecord[] = appData.map((record: any, index: number) => ({
+        objectId: record.id || record.objectId || `app_${index}`,
+        appCarrierWritingNumber: record.appCarrierWritingNumber || '',
+        appClient: record.appClient || '',
+        appUplineUFG_Str: record.appUplineUFG_Str || '',
+        appStatusDate: record.appStatusDate || '',
+        appPremiumAmount: record.appPremiumAmount || 0,
+        appStatus: record.appStatus || 'Unknown',
+        appDate: record.appDate || ''
       }));
 
       setApps(transformedApps);
     } catch (error) {
       console.error('Error loading data:', error);
-      setError('Error connecting to database.');
+      
+      // More specific error messages
+      if (error instanceof TypeError && error.message === 'Failed to fetch') {
+        setError('Network error: Unable to connect to API. Please check your internet connection.');
+      } else if (error instanceof Error && error.name === 'AbortError') {
+        setError('Request timeout: API took too long to respond. Please try again.');
+      } else if (error instanceof Error) {
+        setError(`API Error: ${error.message}`);
+      } else {
+        setError('Unknown error occurred while loading data.');
+      }
     } finally {
       setLoading(false);
     }
@@ -104,11 +124,10 @@ export default function AppsView() {
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
       filtered = filtered.filter(app => 
-        app.policyNumber.toLowerCase().includes(term) ||
-        app.firstName.toLowerCase().includes(term) ||
-        app.lastName.toLowerCase().includes(term) ||
-        app.agentNumber.toLowerCase().includes(term) ||
-        app.phone.toLowerCase().includes(term)
+        app.appCarrierWritingNumber.toLowerCase().includes(term) ||
+        app.appClient.toLowerCase().includes(term) ||
+        app.appUplineUFG_Str.toLowerCase().includes(term) ||
+        app.appStatus.toLowerCase().includes(term)
       );
     }
 
@@ -140,7 +159,12 @@ export default function AppsView() {
 
   const formatPhone = (phone: string) => {
     if (!phone) return '-';
-    return phone.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+    // Handle different phone formats
+    const cleaned = phone.replace(/\D/g, '');
+    if (cleaned.length === 10) {
+      return cleaned.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+    }
+    return phone;
   };
 
   if (loading) {
@@ -178,22 +202,7 @@ export default function AppsView() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Database className="w-5 h-5" />
-            Apps (app_tests)
-            <div className="flex gap-2">
-              <button 
-                onClick={loadData} 
-                className="px-3 py-1 border rounded text-sm bg-white hover:bg-gray-50 flex items-center"
-              >
-                <RefreshCw className="w-4 h-4 mr-2" />
-                Load Data
-              </button>
-              <button 
-                onClick={checkTablesExist} 
-                className="px-3 py-1 border rounded text-sm bg-green-100 hover:bg-green-200 text-green-700"
-              >
-                Check Tables
-              </button>
-            </div>
+            Apps (APP Table)
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -202,7 +211,7 @@ export default function AppsView() {
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                 <Input
-                  placeholder="Search by Policy Number, Name, Agent ID..."
+                  placeholder="Search by Agent ID, Client Name, Phone, Status..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="px-10"
@@ -213,8 +222,6 @@ export default function AppsView() {
           
           <div className="text-sm text-gray-600">
             Showing {filteredApps.length} of {apps.length} records
-            {tablesExist && <span className="ml-2 text-green-600">• Tables exist</span>}
-            {!tablesExist && <span className="ml-2 text-orange-600">• Tables not checked</span>}
           </div>
         </CardContent>
       </Card>
@@ -225,7 +232,6 @@ export default function AppsView() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Policy Number</TableHead>
                 <TableHead>Agent ID</TableHead>
                 <TableHead>Client Name</TableHead>
                 <TableHead>Phone</TableHead>
@@ -239,28 +245,25 @@ export default function AppsView() {
               {filteredApps.map((app) => (
                 <TableRow key={app.objectId}>
                   <TableCell className="font-medium">
-                    {app.policyNumber}
+                    {app.appCarrierWritingNumber}
                   </TableCell>
                   <TableCell>
-                    {app.agentNumber}
+                    {app.appClient}
                   </TableCell>
                   <TableCell>
-                    {app.firstName} {app.lastName}
+                    {formatPhone(app.appUplineUFG_Str)}
                   </TableCell>
                   <TableCell>
-                    {formatPhone(app.phone)}
+                    {formatDate(app.appStatusDate)}
                   </TableCell>
                   <TableCell>
-                    {formatDate(app.dateOfBirth)}
+                    ${app.appPremiumAmount?.toLocaleString() || '-'}
                   </TableCell>
                   <TableCell>
-                    ${app.policyValue?.toLocaleString() || '-'}
+                    {getStatusBadge(app.appStatus)}
                   </TableCell>
                   <TableCell>
-                    {getStatusBadge(app.status)}
-                  </TableCell>
-                  <TableCell>
-                    {formatDate(app.createdAt)}
+                    {formatDate(app.appDate)}
                   </TableCell>
                 </TableRow>
               ))}

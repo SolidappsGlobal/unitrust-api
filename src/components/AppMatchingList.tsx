@@ -20,18 +20,19 @@ interface AppMatchingRecord {
   appDateOfBirth?: string;
   appPolicyValue?: number;
   appStatus?: string;
-  classification: 'auto_confirm' | 'manual_review' | 'new_record';
+  classification: 'auto_confirm' | 'manual_review' | 'new_record' | 'needs_confirmation' | 'no_match';
   confirmed: boolean;
   createdAt: string;
   rankedApps?: string[];
   rankedAppsWithScores?: Array<{appId: string, score: number}>;
+  score?: number;
 }
 
 export default function AppMatchingList() {
-  const [records, setRecords] = useState([]);
-  const [filteredRecords, setFilteredRecords] = useState([]);
+  const [records, setRecords] = useState<AppMatchingRecord[]>([]);
+  const [filteredRecords, setFilteredRecords] = useState<AppMatchingRecord[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   
   // Filters
   const [activeTab, setActiveTab] = useState('manual_review');
@@ -45,15 +46,15 @@ export default function AppMatchingList() {
   });
 
   // Modal states
-  const [selectedRecord, setSelectedRecord] = useState(null);
+  const [selectedRecord, setSelectedRecord] = useState<AppMatchingRecord | null>(null);
   const [showModal, setShowModal] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [appDetails, setAppDetails] = useState([]);
+  const [appDetails, setAppDetails] = useState<any[]>([]);
   const [isClearing, setIsClearing] = useState(false);
-  const [clearResults, setClearResults] = useState([]);
+  const [clearResults, setClearResults] = useState<Array<{table: string, deleted: number, errors: number, timestamp: string}>>([]);
   const [tablesExist, setTablesExist] = useState(false);
 
   // Commented to avoid automatic table creation
@@ -601,7 +602,7 @@ export default function AppMatchingList() {
   };
 
   // Function to classify record based on score and unique matching
-  const classifyRecord = (score: number, rankedApps: any[], csvData: any, appData: any): 'auto_confirm' | 'manual_review' | 'new_record' => {
+  const classifyRecord = (score: number, rankedApps: any[], csvData: any, appData: any): 'auto_confirm' | 'manual_review' | 'new_record' | 'needs_confirmation' | 'no_match' => {
     // Debug: Log classification
     console.log('Classification:', {
       score: score,
@@ -960,7 +961,7 @@ export default function AppMatchingList() {
       alert(`Table ${tableName} cleared successfully! ${result.deleted} records deleted.`);
     } catch (error) {
       console.error(`Error clearing table ${tableName}:`, error);
-      alert(`Error clearing table ${tableName}: ${error.message}`);
+      alert(`Error clearing table ${tableName}: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setIsClearing(false);
     }
@@ -988,7 +989,7 @@ export default function AppMatchingList() {
       alert(`Clearing completed! ${totalDeleted} records deleted, ${totalErrors} errors.`);
     } catch (error) {
       console.error('Error clearing tables:', error);
-      alert(`Error clearing tables: ${error.message}`);
+      alert(`Error clearing tables: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setIsClearing(false);
     }
@@ -1071,30 +1072,30 @@ export default function AppMatchingList() {
             <div className="flex gap-2">
               <button
                 onClick={() => setActiveTab('manual_review')}
-                className={`px-4 py-2 rounded text-sm ${
+                className={`px-4 py-2 rounded text-sm font-medium transition-colors ${
                   activeTab === 'manual_review' 
-                    ? 'bg-yellow-500 hover:bg-yellow-600 text-white' 
-                    : 'bg-white border hover:bg-gray-50 text-gray-700'
+                    ? 'bg-yellow-500 hover:bg-yellow-600 text-white shadow-sm' 
+                    : 'bg-white border border-gray-300 hover:bg-gray-50 text-gray-700'
                 }`}
               >
                 Manual Review ({counts.manual_review})
               </button>
               <button
                 onClick={() => setActiveTab('new_record')}
-                className={`px-4 py-2 rounded text-sm ${
+                className={`px-4 py-2 rounded text-sm font-medium transition-colors ${
                   activeTab === 'new_record' 
-                    ? 'bg-red-500 hover:bg-red-600 text-white' 
-                    : 'bg-white border hover:bg-gray-50 text-gray-700'
+                    ? 'bg-red-500 hover:bg-red-600 text-white shadow-sm' 
+                    : 'bg-white border border-gray-300 hover:bg-gray-50 text-gray-700'
                 }`}
               >
                 New Record ({counts.new_record})
               </button>
               <button
                 onClick={() => setActiveTab('confirmed')}
-                className={`px-4 py-2 rounded text-sm ${
+                className={`px-4 py-2 rounded text-sm font-medium transition-colors ${
                   activeTab === 'confirmed' 
-                    ? 'bg-green-500 hover:bg-green-600 text-white' 
-                    : 'bg-white border hover:bg-gray-50 text-gray-700'
+                    ? 'bg-green-500 hover:bg-green-600 text-white shadow-sm' 
+                    : 'bg-white border border-gray-300 hover:bg-gray-50 text-gray-700'
                 }`}
               >
                 Confirmed ({counts.confirmed})
@@ -1297,7 +1298,7 @@ export default function AppMatchingList() {
                         <div className="space-y-1">
                           <div className="font-medium text-blue-600">Received: {formatPhone(record.full_data.phone)}</div>
                           <div className={`text-sm ${compareValues(record.full_data.phone, record.appPhone, 'phone')}`}>
-                            App: {formatPhone(record.appPhone) || 'Not Found'}
+                            App: {record.appPhone ? formatPhone(record.appPhone) : 'Not Found'}
                           </div>
                         </div>
                       </TableCell>

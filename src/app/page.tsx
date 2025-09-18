@@ -1,16 +1,17 @@
+"use client"
+
 import React, { useState } from "react";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "./components/ui/tabs";
-import { AuthenticationScreen } from "./components/AuthenticationScreen";
-import { UserMenu } from "./components/UserMenu";
-import { UploadTab } from "./components/UploadTab";
-import CSVUploadProcessor from "./components/CSVUploadProcessor";
-import AppMatchingList from "./components/AppMatchingList";
-import AppsView from "./components/AppsView";
+} from "@/components/ui/tabs";
+import { UserMenu } from "@/components/UserMenu";
+import { UploadTab } from "@/components/UploadTab";
+import CSVUploadProcessor from "@/components/CSVUploadProcessor";
+import AppMatchingList from "@/components/AppMatchingList";
+import AppsView from "@/components/AppsView";
 import { Upload, FileText, Database } from "lucide-react";
 
 interface User {
@@ -18,47 +19,19 @@ interface User {
   name: string;
 }
 
-export default function App() {
+export default function Home() {
   const [activeView, setActiveView] = useState("upload");
-  const [user, setUser] = useState<User | null>(null);
-  const [showChangePassword, setShowChangePassword] = useState(false);
   const [csvData, setCsvData] = useState<any[]>([]);
   const [headers, setHeaders] = useState<string[]>([]);
 
-  const handleAuthenticated = (authenticatedUser: User) => {
-    setUser(authenticatedUser);
-  };
-
-  const handleLogout = () => {
-    setUser(null);
-    setActiveView("upload");
-  };
-
-  const handleChangePassword = () => {
-    setShowChangePassword(true);
-  };
+  // Mock user for demonstration
+  const user: User = { email: "admin@test.com", name: "Admin User" };
 
   const handleCsvUpload = (data: any[], headers: string[]) => {
     setCsvData(data);
     setHeaders(headers);
     setActiveView("list");
   };
-
-  // Show authentication screen if user is not logged in or wants to change password
-  // TEMPORÁRIO: Comentado para pular o login
-  // if (!user || showChangePassword) {
-  //   return (
-  //     <AuthenticationScreen
-  //       onAuthenticated={(authenticatedUser) => {
-  //         setUser(authenticatedUser);
-  //         setShowChangePassword(false);
-  //       }}
-  //     />
-  //   );
-  // }
-
-  // TEMPORARY: Mock user to skip login
-  const mockUser = { email: "admin@test.com", name: "Admin User" };
 
   return (
     <div className="min-h-screen bg-gray-50 p-4">
@@ -102,12 +75,8 @@ export default function App() {
             </Tabs>
           </div>
 
-          {/* User Menu */}
-          <UserMenu
-            user={mockUser}
-            onLogout={handleLogout}
-            onChangePassword={handleChangePassword}
-          />
+          {/* User Info */}
+          <UserMenu user={user} />
         </div>
 
         {/* Content Area */}

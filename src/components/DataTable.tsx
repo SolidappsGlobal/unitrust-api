@@ -536,7 +536,7 @@ export function DataTable({ data, headers }: DataTableProps) {
                           <TableCell>
                             <Checkbox
                               checked={checked}
-                              onCheckedChange={(v) => {
+                              onCheckedChange={(v: boolean | undefined) => {
                                 const next = Boolean(v);
                                 setSelectedRecords((prev) => {
                                   const pid = id as string | number;

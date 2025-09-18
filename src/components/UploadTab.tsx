@@ -6,7 +6,6 @@ import { Progress } from './ui/progress';
 import { Alert, AlertDescription } from './ui/alert';
 import { Badge } from './ui/badge';
 import { Upload, FileText, CheckCircle, AlertCircle, XCircle } from 'lucide-react';
-import Papa from 'papaparse';
 import { insertData, queryData } from '../utils/back4app-queries';
 
 interface UploadTabProps {
